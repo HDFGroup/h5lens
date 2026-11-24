@@ -65,40 +65,66 @@ note that follows the table is the one exception, and labels itself.
 | 5 | `list_max`/`btree_min` cross-index consistency | `H5SM.c:1984-1985` — decoded independently per index, no cross-check | `H5SM.c:1984-1985` | **Measured: silent misreporting, no functional break.** Built a genuine 2-index file, patched only one index's values (unreachable via any legitimate API call). `H5Fget_create_plist()` silently reports the *other* index's values — the real list↔B-tree conversion logic is unaffected since it reads each index's own values directly | **None — confirmed coverage gap.** `h5policy` accepts the crafted file outright |
 | 6 | `msg_type_id` out-of-bounds array index | `H5SMmessage.c:323` — raw decode, indexes a fixed 27-element array with no bound check before the access | `H5SM.c:2343-2344`, `H5Omessage.c:1091` | **Measured, cross-platform (macOS + Linux, stock and ASan builds): the out-of-bounds read genuinely executes on a real, crafted file, and is silent on every build tested** — not because the access is safe, but because (a) ASan's redzones don't cover "wild" far-out-of-bounds reads on small globals, a general sanitizer limitation, not platform-specific, and (b) the one reachable consumer path uses the resulting garbage value only in a pointer-*equality* comparison, never a dereference | Confirmed: dedicated check (`H5_CORRUPT_SOHM_MESSAGE_TYPES`, `h5_sohm.pk:103-104 (msg_type >= 16UL)`) |
 
-**Also checked — guarded on the ordinary load path, unguarded on the
-prefetched one:** the *within*-index relationship `num_messages > list_max`
-(a single index whose message count already exceeds its own declared capacity)
-carries a real, deliberate check — `H5SMcache.c:495-496`, `"number of SOHM
-messages exceeds list size"` — and no build flag masks it.
+**Also checked — the message count is guarded on both routes into the
+client:** the *within*-index relationship `num_messages > list_max` (a single
+index whose message count already exceeds its own declared capacity) carries a
+real, deliberate check in `H5SM__cache_list_verify_chksum`
+(`H5SMcache.c:495-496`) *and* a second one in `H5SM__cache_list_deserialize`
+itself (`H5SMcache.c:566-567`), immediately above the decode loop. Both read
+`"number of SOHM messages exceeds list size"`, and no build flag masks either.
+The deserialize-side check arrived with upstream `HDFGroup/hdf5#6499` (commit
+`20f0b9564bc`, 2026-07-14), so skipping `verify_chksum` does not unguard this
+invariant. An earlier revision of this note said it did; corrected 2026-11-24
+against develop `31715cc6d3a` (H5_VERS 2.4.0).
 
-But that check lives in `H5SM__cache_list_verify_chksum`, and the cache reaches
-its clients two ways. `H5C__load_entry` calls `verify_chksum` before
-deserializing (`H5Centry.c:1221`). `H5C__deserialize_prefetched_entry` does
-not: it sets `len = pf_entry_ptr->size` and calls `deserialize` directly
+**What the prefetched path leaves unguarded is the image length, not the
+message count.** The cache reaches this client two ways. `H5C__load_entry`
+calls `get_initial_load_size` and then `verify_chksum` before deserializing
+(`H5Centry.c:1221`), and for a SOHM list `get_initial_load_size` sets
+`*image_len = udata->header->list_size` (`H5SMcache.c:460`) — which is what
+makes `len` and `list_size` agree on that path.
+`H5C__deserialize_prefetched_entry` calls neither: it sets
+`len = pf_entry_ptr->size` and calls `deserialize` directly
 (`H5Centry.c:1891`, `:1896`), deliberately and with a comment saying why —
 "since the size of the on disk image is known exactly, there is no need for
 either a call to the `get_initial_load_size()` callback, or retries …
 Similarly, there is no need to clamp possible reads beyond EOF". Three
-protections are therefore absent at once on that path: the initial-load-size
-callback, the EOF/end-of-allocation clamp, and `verify_chksum`.
+protections are absent at once on that path — the initial-load-size callback,
+the EOF/end-of-allocation clamp, and `verify_chksum` — but only the first of
+the three bears on this client's extent.
 
-So for a list entry served from a metadata cache image the guard never runs,
-and `H5SM__cache_list_deserialize` walks `udata->header->num_messages` entries
-of `H5SM_SOHM_ENTRY_SIZE` apiece (`H5SMcache.c:571-575`) with no always-on
-bound of its own — its own comment says "checksum verification already done in
-verify_chksum cb" (`:578`), and its only reconciliations with `len` are the
-asserts at `:543` and `:584`, the second of which runs *after* the walk.
-`pf_entry_ptr->size` is decoded from the cache image and rejected only when it
-is zero (`H5Cimage.c:2829-2831`), so it need not agree with `list_size` at all.
+So nothing on that path forces `len == list_size`. `pf_entry_ptr->size` is
+decoded from the cache-image entry record and rejected only when it is zero
+(`H5Cimage.c:2829-2831`), and the entry image is allocated at exactly that size
+and filled from the cache-image block (`H5Cimage.c:2859`, `:2869`). The decode
+loop's extent, meanwhile, is `list_size` and not `len`: bounded by
+`num_messages <= list_max` it advances at most `list_max` ×
+`H5SM_SOHM_ENTRY_SIZE` bytes (`H5SMcache.c:571-575`), and `list_size` is
+`H5SM_LIST_SIZE(f, list_max)` computed from the decoded `list_max`
+(`H5SMcache.c:271`). A cache image whose SOHM-list entry is shorter than the
+header's `list_size` therefore drives the walk past the end of that allocation
+by up to `list_size - len` bytes. The one reconciliation of the two is the
+assert at `:543` (`udata->header->list_size == len`), which disappears under
+`-DNDEBUG` — `len` is declared `H5_ATTR_NDEBUG_UNUSED` for exactly that reason.
+The post-loop assert at `:584` is not a second one: it compares the consumed
+byte count against `list_size`, not against `len`. The signature check at
+`:557` reads `H5_SIZEOF_MAGIC` bytes before either.
 
 **Traced, not yet measured.** No fixture has been built that carries a cache
-image whose SOHM list entry size disagrees with the header, so this is a
-source-derived hole in the guard's *coverage*, not a measured consequence.
-`h5policy` does not depend on which path libhdf5 takes and rejects the file
-either way: dedicated check (`H5_CORRUPT_SOHM_MESSAGE_COUNT`, `h5_sohm.pk:570
-(nmessages > list_max)`). The same path question applies to `num_indexes` in
-row 2 above, whose "clean file-open failure" was measured on the ordinary load
-path — the path that has the end-of-allocation clamp this one lacks.
+image whose SOHM-list entry size disagrees with the header, so this is a
+source-derived hole in the *image length*'s coverage, not a measured
+consequence. It is not an invariant `H5_CORRUPT_SOHM_MESSAGE_COUNT`
+(`h5_sohm.pk:570 (nmessages > list_max)`) bears on either: that check still
+rejects an inflated message count whichever path libhdf5 takes, while the file
+at issue here carries a conforming count and a short cache-image entry. Nor
+does any `h5policy` check compare a cache-image entry's declared length against
+the size the client at that address computes for itself — an entry that only
+partly covers a mapping falls back to the on-disk bytes,
+`h5_findings.pk:132-148 (h5policy_mdci_replay_source)` — so that is a second
+thing to measure rather than a verdict. The same path question applies to
+`num_indexes` in row 2 above, whose "clean file-open failure" was measured on
+the ordinary load path — the path that has the end-of-allocation clamp this one
+lacks.
 
 **Note on `h5policy` coverage generally:** five of these six invariants
 have a dedicated check, all defined in `h5policy/pickles/h5_sohm.pk` (see

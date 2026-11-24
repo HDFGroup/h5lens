@@ -100,9 +100,12 @@ sweep_a:
     client" was the membership of the PATTERN, not of the shape: eight more
     read-path clients discard `len` in the second spelling, one of them is now
     the subject of an external report, and three are unrecorded here.  The
-    H5SMcache.c precedent survives and is still the right thing to cite -- but
-    it is a verify_chksum guard, and the amendment shows there is a path on
-    which verify_chksum never runs.
+    H5SMcache.c precedent survives and is still the right thing to cite.
+    AMENDED 2026-11-24: an earlier revision of this paragraph qualified it --
+    "it is a verify_chksum guard, and the amendment shows there is a path on
+    which verify_chksum never runs".  That qualification was wrong.  The same
+    always-on check also sits in the deserialize twin, so the precedent holds
+    on both callbacks of that client; see the src/H5SMcache.c:525 hit below.
 
   # -- AMENDMENT: the net was half the shape ----------------------------------
   amendment:
@@ -176,22 +179,39 @@ sweep_a:
           fsm-section-class-not-serialized.yml bounds the class byte -- both are
           FIELDS inside the walk.  This is the extent of the walk itself.
       - site: src/H5SMcache.c:525 (H5SM__cache_list_deserialize)
-        verdict: NEW -- and it qualifies this sweep's own precedent
+        verdict: >-
+          NEW, but narrower than first recorded -- what the prefetched path
+          leaves unbounded is `len`, not the message count
         note: >-
           The loop runs to udata->header->num_messages, advancing
-          H5SM_SOHM_ENTRY_SIZE(f) per message; the only extent test is an assert
-          AFTER the loop.  The `num_messages > list_max` guard this sweep cites
-          as the model lives in the verify_chksum TWIN (src/H5SMcache.c:477 in
-          the 2.3.0 tree), which the prefetched path never calls.  So "here is
-          what you already do elsewhere" remains correct about that guard, and
-          is only half-true about the client that carries it.
-          docs/ASSERT_MASKED_INVARIANTS.md recorded the same relationship as
-          "already properly guarded ... not masked by anything" in its SOHM
-          section -- true of the verify_chksum site it names, and silent about
-          the deserialize twin.  RECONCILED 2026-11-18: that note now states the
-          path split explicitly, labels the prefetched half "traced, not yet
-          measured", and records that h5policy rejects the file either way
-          (H5_CORRUPT_SOHM_MESSAGE_COUNT, h5_sohm.pk:570 (nmessages > list_max)).
+          H5SM_SOHM_ENTRY_SIZE(f) per message.
+          CORRECTED 2026-11-24 against develop 31715cc6d3a.  An earlier revision
+          of this entry said the `num_messages > list_max` guard lives only in
+          the verify_chksum TWIN (src/H5SMcache.c:477), which the prefetched
+          path never calls.  It does not: src/H5SMcache.c:566-567 holds the
+          same always-on check inside the deserializer itself, immediately
+          above the loop, added upstream by HDFGroup/hdf5#6499 (20f0b9564bc,
+          2026-07-14).  That predates the ceaac5bc59c4 tree this amendment was
+          read on, so the entry misread the source rather than drifting off it.
+          Skipping verify_chksum therefore does NOT unguard the message count,
+          and this sweep's precedent is stronger than recorded: the model guard
+          exists on both callbacks of the client.
+          What survives is the bound this sweep is actually about.  Bounded by
+          list_max the loop still spans up to list_size bytes, while the buffer
+          is pf_entry_ptr->size bytes (src/H5Cimage.c:2859, :2869), rejected
+          only for being zero (:2829-2831).  Nothing forces the two to agree
+          once get_initial_load_size is skipped -- it is THAT callback, not
+          verify_chksum, that sets *image_len = list_size
+          (src/H5SMcache.c:460).  The sole reconciliation is
+          assert(udata->header->list_size == len) at :543; the post-loop assert
+          at :584 compares against list_size, not len, so it cannot catch the
+          disagreement even with asserts live.
+          docs/ASSERT_MASKED_INVARIANTS.md carries the same correction in its
+          SOHM section, keeps the finding labelled "traced, not yet measured",
+          and no longer claims h5policy rejects the file either way:
+          H5_CORRUPT_SOHM_MESSAGE_COUNT bounds the message count, not the
+          entry length, and no h5policy check compares a cache-image entry's
+          declared length with the size its client computes for itself.
       - site: src/H5SMcache.c:190 (H5SM__cache_table_deserialize)
         verdict: >-
           candidate -- the field is recorded and measured, the PATH is not
