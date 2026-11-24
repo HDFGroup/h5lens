@@ -54,7 +54,9 @@ misaligned or unmapped access).
 Every finding in the table below has been built as a real fixture (one or two
 bytes changed in a valid seed, checksum resealed) and measured against both
 `h5policy` and a real libhdf5 build — none of the six are "traced only." The
-note that follows the table is the one exception, and labels itself.
+note that follows the table is now measured too, by a fixture of a different
+shape: a cache-image entry whose declared length disagrees with the index it
+caches. It is the one finding in this section that `h5policy` accepts.
 
 | # | Invariant | Root cause | Guard site(s) | Consequence | `h5policy` |
 |---|---|---|---|---|---|
@@ -110,21 +112,88 @@ The post-loop assert at `:584` is not a second one: it compares the consumed
 byte count against `list_size`, not against `len`. The signature check at
 `:557` reads `H5_SIZEOF_MAGIC` bytes before either.
 
-**Traced, not yet measured.** No fixture has been built that carries a cache
-image whose SOHM-list entry size disagrees with the header, so this is a
-source-derived hole in the *image length*'s coverage, not a measured
-consequence. It is not an invariant `H5_CORRUPT_SOHM_MESSAGE_COUNT`
-(`h5_sohm.pk:570 (nmessages > list_max)`) bears on either: that check still
-rejects an inflated message count whichever path libhdf5 takes, while the file
-at issue here carries a conforming count and a short cache-image entry. Nor
-does any `h5policy` check compare a cache-image entry's declared length against
-the size the client at that address computes for itself — an entry that only
-partly covers a mapping falls back to the on-disk bytes,
-`h5_findings.pk:132-148 (h5policy_mdci_replay_source)` — so that is a second
-thing to measure rather than a verdict. The same path question applies to
-`num_indexes` in row 2 above, whose "clean file-open failure" was measured on
-the ordinary load path — the path that has the end-of-allocation clamp this one
-lacks.
+**Measured, 2026-11-25, against develop `31715cc6d3a`.** A fixture now exists
+and the hole is a live finding, not a source-derived one.
+
+*Construction.* One library-written seed carries both features at once: a
+shared-message index in list form (`list_max` 32, so `list_size` is 552 — an
+8-byte prefix plus 32 × 17) and a generated metadata cache image. libhdf5
+serializes the list **into** the image and leaves its file address unwritten,
+so for such a file the prefetched path is the only route to the list. The
+specimen changes one field: the cache-image entry for the list declares 8
+bytes instead of 552. Its cache-image Jenkins checksum, the image length and
+the superblock-extension message that declares it are all re-sealed, so every
+other envelope in the file is valid.
+
+*What libhdf5 does.* A single `H5Dcreate2` whose datatype and dataspace are
+already shared reaches the list through `H5SM_try_share` (`H5SM.c:1103`) →
+`H5SM__write_mesg` (`H5SM.c:1278`) → `H5AC_protect` → `H5C_protect` →
+`H5C__deserialize_prefetched_entry` (`H5Centry.c:1896`). On a RelWithDebInfo
+AddressSanitizer build with the **shipped** assert state — `-DNDEBUG` present,
+`settings_sha256` `7a522de91894d50a…` — that is a `heap-buffer-overflow`,
+`READ of size 1` immediately past the 8-byte region allocated at
+`H5Cimage.c:2859`, in `H5SM__message_decode` (`H5SMmessage.c:313`) called from
+the decode loop at `H5SMcache.c:572`.
+
+On a stock Release build (asserts off, no sanitizers, `settings_sha256`
+`50e2633e493d8439…`) the same read is **silent**. The operation fails
+afterwards at `H5AC_unprotect` — "size of entry changed" (`H5AC.c:1568`) —
+because the client's `image_len` callback reports `list_size` while the cache
+recorded the entry at 8 bytes. That is a post-hoc consistency check, not a
+bound: it runs after the walk.
+
+*The bytes are consumed, not merely read.* A sibling specimen raises
+`num_messages` to `list_max`, which both always-on guards accept, so the walk
+spans the full 552 bytes. The list is then promoted to a B-tree and each
+decoded entry is dereferenced as a message location and a fractal-heap ID
+(`H5SM__convert_list_to_btree`, `H5SM.c:732`; `H5SM__read_mesg`,
+`H5SM.c:2375`).
+
+*The `:543` assert cannot fire.* Measured on a build identical to the one
+above except that `-DNDEBUG` is dropped (`settings_sha256`
+`d7803c2df288a8a5…`): every cache-image file, **including the unmodified
+seed**, aborts earlier at `assert(NULL == pf_entry_ptr)` (`H5Centry.c:2035`),
+on the first prefetched entry of the image — `gdb` puts that frame at
+`addr=97, type=H5AC_SOHM_TABLE` for both the control and the specimen. Its
+block is guarded by `#ifndef NDEGUG` (`H5Centry.c:2032`), a misspelling of
+`NDEBUG`, so the block compiles everywhere and only the assert inside it is
+removed by `-DNDEBUG`. So the one check standing between a short `len` and the
+walk is absent from every build where the walk is reachable. That is an
+adjacent defect in the metadata cache, recorded here because it is why this
+guard has no practical effect.
+
+**Measured: `h5policy` accepts the file.** A second specimen differs from the
+first only in writing the real 552-byte list body back to its file address, so
+every structure reachable on disk is valid. The oracle **accepts** it on
+`untrusted-strict`, `forensic` and `legacy` alike, while libhdf5 reads out of
+bounds on it — a confirmed coverage gap, not an inference. Nothing in
+`h5policy` compares a cache-image entry's declared length against the size the
+client at that address computes for itself; an entry that only partly covers a
+mapping silently falls back to the on-disk bytes
+(`h5_findings.pk:132-148 (h5policy_mdci_replay_source)`). The first specimen,
+whose file address libhdf5 left empty, *is* rejected — with
+`H5_CORRUPT_BAD_CHECKSUM` against zeroed bytes, which is that same fallback
+firing and not a check on this invariant.
+`H5_CORRUPT_SOHM_MESSAGE_COUNT` (`h5_sohm.pk:570 (nmessages > list_max)`) does
+not bear on it either: the specimens carry a conforming message count.
+
+*Provenance.* Specimens (sha256, bit-reproducible from the generator):
+`a0eedebec6d0867c…` the short entry, `c1522a059a73a282…` the same with the
+on-disk body restored, `6ffa9d2cb73fe518…` the amplified count,
+`f1c759dafdfbe9bb…` the seed. Builds are named by role — baseline (Release,
+asserts off, no sanitizers) and two candidates differing only in `-DNDEBUG` —
+and pinned by the `settings_sha256` values above; workstation-local installs,
+paths not recorded. Measured on x86-64 Linux only; no 32-bit libhdf5 is
+installed here, and the ILP32 behaviour is therefore **unmeasured** — the
+arithmetic is a difference of two `size_t` values rather than a product that
+can wrap, so the same over-read is *expected* at 32 bits, which is an
+inference.
+
+*Still open.* The same path question applies to `num_indexes` in row 2 above,
+whose "clean file-open failure" was measured on the ordinary load path — the
+path that has the end-of-allocation clamp this one lacks. The master table is
+cached in the same image, so the same construction applies to it; that has not
+been measured.
 
 **Note on `h5policy` coverage generally:** five of these six invariants
 have a dedicated check, all defined in `h5policy/pickles/h5_sohm.pk` (see

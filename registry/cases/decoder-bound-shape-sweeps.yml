@@ -16,9 +16,13 @@ title: sweeps for three decoder bound-checking shapes -- discarded image length,
   additive extent checks that can wrap, and positions computed from header
   constants
 status: complete                 # all three run; lead followed up -- but see
-                                 # sweep_a.amendment: sweep A's NET was wrong and
-                                 # seven of its sites are still unassessed
-disclosure: "n/a -- local source analysis only; no advisory consulted"
+                                 # sweep_a.amendment: sweep A's NET was wrong,
+                                 # one of its sites is now a MEASURED defect
+                                 # (src/H5SMcache.c:525, 2026-11-25) and six
+                                 # are still unassessed
+disclosure: >-
+  n/a -- local source analysis, and for src/H5SMcache.c:525 local builds and
+  local measurement as well.  No web access and no advisory consulted.
 
 # -- What was swept and why ---------------------------------------------------
 motivation: >-
@@ -99,7 +103,9 @@ sweep_a:
     SUPERSEDED 2026-11-18 as to membership.  "Exactly the v2 B-tree cache
     client" was the membership of the PATTERN, not of the shape: eight more
     read-path clients discard `len` in the second spelling, one of them is now
-    the subject of an external report, and three are unrecorded here.  The
+    the subject of an external report, and three were unrecorded here -- one
+    of those three, src/H5SMcache.c:525, has since been measured and is a
+    confirmed out-of-bounds read.  The
     H5SMcache.c precedent survives and is still the right thing to cite.
     AMENDED 2026-11-24: an earlier revision of this paragraph qualified it --
     "it is a verify_chksum guard, and the amendment shows there is a path on
@@ -180,8 +186,9 @@ sweep_a:
           FIELDS inside the walk.  This is the extent of the walk itself.
       - site: src/H5SMcache.c:525 (H5SM__cache_list_deserialize)
         verdict: >-
-          NEW, but narrower than first recorded -- what the prefetched path
-          leaves unbounded is `len`, not the message count
+          DEFECT -- MEASURED 2026-11-25.  Narrower than first recorded: what
+          the prefetched path leaves unbounded is `len`, not the message
+          count, and that is enough for an out-of-bounds read.
         note: >-
           The loop runs to udata->header->num_messages, advancing
           H5SM_SOHM_ENTRY_SIZE(f) per message.
@@ -206,12 +213,57 @@ sweep_a:
           assert(udata->header->list_size == len) at :543; the post-loop assert
           at :584 compares against list_size, not len, so it cannot catch the
           disagreement even with asserts live.
-          docs/ASSERT_MASKED_INVARIANTS.md carries the same correction in its
-          SOHM section, keeps the finding labelled "traced, not yet measured",
-          and no longer claims h5policy rejects the file either way:
-          H5_CORRUPT_SOHM_MESSAGE_COUNT bounds the message count, not the
-          entry length, and no h5policy check compares a cache-image entry's
-          declared length with the size its client computes for itself.
+          MEASURED 2026-11-25 against develop 31715cc6d3a, on x86-64 Linux.
+          A seed carrying both a list-form SOHM index (list_max 32, so
+          list_size 552) and a generated cache image, with one field changed
+          -- the cached entry for the list declares 8 bytes -- and every
+          envelope it disturbs re-sealed.  On a RelWithDebInfo ASan build with
+          the SHIPPED assert state (-DNDEBUG present; settings_sha256
+          7a522de91894d50a...) a single H5Dcreate2 produces an
+          AddressSanitizer heap-buffer-overflow, READ of size 1 past the
+          8-byte region allocated at src/H5Cimage.c:2859, in
+          H5SM__message_decode (src/H5SMmessage.c:313) from the decode loop at
+          src/H5SMcache.c:572, reached through H5SM_try_share (src/H5SM.c:1103)
+          and H5C__deserialize_prefetched_entry (src/H5Centry.c:1896).  On a
+          stock Release build (settings_sha256 50e2633e493d8439...) the read is
+          SILENT; the operation then fails at H5AC_unprotect, "size of entry
+          changed" (src/H5AC.c:1568), which runs after the walk.
+          Raising num_messages to list_max -- a value both always-on guards
+          accept -- widens the walk to the full 552 bytes, and the
+          out-of-bounds bytes are then dereferenced as message locations and
+          fractal-heap IDs (src/H5SM.c:732, src/H5SM.c:2375).
+          THE ASSERT AT :543 CANNOT FIRE.  On the same build with -DNDEBUG
+          dropped (settings_sha256 d7803c2df288a8a5...), every cache-image
+          file including the UNMODIFIED seed aborts earlier, at
+          assert(NULL == pf_entry_ptr) (src/H5Centry.c:2035), on the image's
+          first prefetched entry -- gdb puts that frame at addr=97,
+          type=H5AC_SOHM_TABLE for control and specimen alike.  That block is
+          guarded by a misspelled `#ifndef NDEGUG` (src/H5Centry.c:2032), so it
+          compiles everywhere and only the assert inside it is removed.  The
+          sole reconciliation of len with list_size is therefore absent from
+          every build on which the walk is reachable.  Adjacent defect, in the
+          cache rather than in this client, and unrecorded elsewhere.
+          h5policy ACCEPTS the file.  A sibling specimen differing only in
+          having the real list body written back to its file address is
+          accepted on untrusted-strict, forensic and legacy alike while
+          libhdf5 reads out of bounds on it: a measured coverage gap, not an
+          inference.  The first specimen IS rejected, but with
+          H5_CORRUPT_BAD_CHECKSUM against the zeroed bytes libhdf5 left at the
+          list's file address -- the replay fallback firing
+          (h5_findings.pk:132-148 (h5policy_mdci_replay_source)), not a check
+          on this invariant.  H5_CORRUPT_SOHM_MESSAGE_COUNT
+          (h5_sohm.pk:570 (nmessages > list_max)) does not bear on it either;
+          the specimens carry a conforming count.
+          Specimen sha256, bit-reproducible from the generator:
+          a0eedebec6d0867c... (short entry), c1522a059a73a282... (the same with
+          the on-disk body restored, the one h5policy accepts),
+          6ffa9d2cb73fe518... (amplified count), f1c759dafdfbe9bb... (seed).
+          Builds named by role; workstation-local installs, paths not recorded.
+          Unmeasured: 32-bit.  No -m32 libhdf5 is installed here.  The
+          arithmetic is a difference of two size_t values, not a product that
+          can wrap, so the same over-read is EXPECTED at ILP32 -- inferred.
+          docs/ASSERT_MASKED_INVARIANTS.md carries the same measurement in its
+          SOHM section.
       - site: src/H5SMcache.c:190 (H5SM__cache_table_deserialize)
         verdict: >-
           candidate -- the field is recorded and measured, the PATH is not
@@ -254,14 +306,26 @@ sweep_a:
           over-read rather than an unbounded one.  Listed for completeness so
           the next sweep does not re-flag them as unexamined.
     what_is_still_open: >-
-      Three unrecorded candidates (src/H5FScache.c:922, src/H5SMcache.c:525,
-      src/H5HFcache.c:904), one externally reported defect with no record here
+      Two unrecorded candidates (src/H5FScache.c:922, src/H5HFcache.c:904),
+      one externally reported defect with no record here
       (src/H5FAcache.c:610), one unmeasured path question for an already
-      measured field (src/H5SMcache.c:190), and two bounded residuals.  None of
-      this was executed, built, or run against the oracle; it is source-derived
-      from the ceaac5bc59c4 tree exactly like the sweeps above.
-      So sweep A is NOT closed, and the "total yield of NEW defects is ONE" line
-      in followups below counts only what the narrower net could see.
+      measured field (src/H5SMcache.c:190), and two bounded residuals.
+      src/H5SMcache.c:525 is no longer among them: it was measured on
+      2026-11-25 and is a confirmed out-of-bounds read -- see its hit above.
+      That one measurement also settles the shape for the rest: the bound that
+      goes missing on the prefetched path is get_initial_load_size, so every
+      client whose extent comes from file data rather than from `len` is
+      exposed the same way, and the remaining candidates differ only in what
+      they do with the bytes.
+      EVIDENCE STATUS, which differs per site.  src/H5SMcache.c:525 was built,
+      run and measured on 2026-11-25 against develop 31715cc6d3a -- see its
+      hit above.  Everything else in this amendment was NOT executed, built or
+      run against the oracle; it is source-derived from the ceaac5bc59c4 tree
+      exactly like the sweeps above.
+      So sweep A is NOT closed, and the "total yield of NEW defects is ONE"
+      line in followups below counts only what the narrower net could see:
+      with src/H5SMcache.c:525 measured, the yield of this record is at least
+      two.
 
 # == SWEEP B: additive extent checks that can wrap =============================
 sweep_b:
