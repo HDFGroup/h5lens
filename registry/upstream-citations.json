@@ -1,0 +1,2704 @@
+{
+  "schema": 1,
+  "generated_by": "tools/check_upstream_citations.py --refresh",
+  "note": "Recorded anchors for every libhdf5 line citation in the tracked tree: the exact text of the cited line and the function containing it, as observed in the upstream revision named by verified_at. Generated -- do not hand-edit.",
+  "verified_at": "b32cc3c776f",
+  "anchors": {
+    "H5.c:478": {
+      "text": "            fprintf(stderr, \"HDF5: infinite loop closing library\\n\");",
+      "function": "H5_term_library"
+    },
+    "H5AC.c:593": {
+      "text": "    if (H5C_expunge_entry(f, type, addr, flags) < 0)",
+      "function": "H5AC_expunge_entry"
+    },
+    "H5AC.c:1302": {
+      "text": "    if (NULL == (thing = H5C_protect(f, type, addr, udata, flags)))",
+      "function": "H5AC_protect"
+    },
+    "H5AC.c:1438": {
+      "text": "    cache_ptr = entry_ptr->cache_ptr;",
+      "function": "H5AC_unpin_entry"
+    },
+    "H5AC.c:1568": {
+      "text": "            HGOTO_ERROR(H5E_CACHE, H5E_BADSIZE, FAIL, \"size of entry changed\");",
+      "function": "H5AC_unprotect"
+    },
+    "H5ACprivate.h:46": {
+      "text": "    H5AC_BT_ID = 0,           /* ( 0) B-tree nodes                                */",
+      "function": null
+    },
+    "H5Abtree2.c:319": {
+      "text": "    H5MM_memcpy(nrecord->id.id, raw, (size_t)H5O_FHEAP_ID_LEN);",
+      "function": "H5A__dense_btree2_name_decode"
+    },
+    "H5Adense.c:182": {
+      "text": "    fheap_cparam.managed.width            = H5O_FHEAP_MAN_WIDTH;",
+      "function": "H5A__dense_create"
+    },
+    "H5Adense.c:526": {
+      "text": "        if (NULL == (bt2_corder = H5B2_open(f, ainfo->corder_bt2_addr, NULL)))",
+      "function": "H5A__dense_insert"
+    },
+    "H5Adense.c:1082": {
+      "text": "                ret_value = (bt2_udata->attr_op->u.lib_op)(fh_udata.attr, bt2_udata->op_data);",
+      "function": "H5A__dense_iterate_bt2_cb"
+    },
+    "H5Aint.c:769": {
+      "text": "                H5MM_memcpy(tconv_buf, attr->shared->data, (src_type_size * nelmts));",
+      "function": "H5A__read"
+    },
+    "H5Aint.c:1616": {
+      "text": "    assert(atable->num_attrs < atable->max_attrs);",
+      "function": "H5A__dense_build_table_cb"
+    },
+    "H5Aint.c:1619": {
+      "text": "    if (NULL == (atable->attrs[atable->num_attrs] = H5FL_CALLOC(H5A_t)))",
+      "function": "H5A__dense_build_table_cb"
+    },
+    "H5Aint.c:1954": {
+      "text": "H5A__attr_release_table(H5A_attr_table_t *atable)",
+      "function": "H5A__attr_release_table"
+    },
+    "H5Aint.c:2018": {
+      "text": "                if (NULL == (bt2_name = H5B2_open(f, ainfo->name_bt2_addr, NULL)))",
+      "function": "H5A__get_ainfo"
+    },
+    "H5B.c:386": {
+      "text": "                HGOTO_ERROR(H5E_BTREE, H5E_BADVALUE, FAIL, \"cyclic B-tree detected\");",
+      "function": "H5B_find_helper"
+    },
+    "H5B.c:858": {
+      "text": "        assert(0 == bt->level);",
+      "function": "H5B__insert_helper"
+    },
+    "H5B.c:1153": {
+      "text": "    if (exp_level != H5B_UNKNOWN_NODELEVEL && bt->level != (unsigned)exp_level)",
+      "function": "H5B__iterate_helper"
+    },
+    "H5B2.c:826": {
+      "text": "                assert(0 && \"Index off end of tree??\");",
+      "function": "H5B2_index"
+    },
+    "H5B2.c:848": {
+      "text": "        assert(idx < leaf->nrec);",
+      "function": "H5B2_index"
+    },
+    "H5B2cache.c:224": {
+      "text": "H5B2__cache_hdr_deserialize(const void *_image, size_t H5_ATTR_UNUSED len, void *_udata,",
+      "function": "H5B2__cache_hdr_deserialize"
+    },
+    "H5B2cache.c:261": {
+      "text": "    UINT32DECODE(image, cparam.node_size);",
+      "function": "H5B2__cache_hdr_deserialize"
+    },
+    "H5B2cache.c:264": {
+      "text": "    UINT16DECODE(image, cparam.rrec_size);",
+      "function": "H5B2__cache_hdr_deserialize"
+    },
+    "H5B2cache.c:270": {
+      "text": "    cparam.split_percent = *image++;",
+      "function": "H5B2__cache_hdr_deserialize"
+    },
+    "H5B2cache.c:274": {
+      "text": "    H5F_addr_decode(udata->f, (const uint8_t **)&image, &(hdr->root.addr));",
+      "function": "H5B2__cache_hdr_deserialize"
+    },
+    "H5B2cache.c:275": {
+      "text": "    UINT16DECODE(image, hdr->root.node_nrec);",
+      "function": "H5B2__cache_hdr_deserialize"
+    },
+    "H5B2cache.c:288": {
+      "text": "    if (H5B2__hdr_init(hdr, &cparam, udata->ctx_udata, depth) < 0)",
+      "function": "H5B2__cache_hdr_deserialize"
+    },
+    "H5B2cache.c:553": {
+      "text": "H5B2__cache_int_verify_chksum(const void *_image, size_t H5_ATTR_UNUSED len, void *_udata)",
+      "function": "H5B2__cache_int_verify_chksum"
+    },
+    "H5B2cache.c:569": {
+      "text": "    chk_size = H5B2_INT_PREFIX_SIZE + (udata->nrec * udata->hdr->rrec_size) +",
+      "function": "H5B2__cache_int_verify_chksum"
+    },
+    "H5B2cache.c:573": {
+      "text": "    if (H5F_get_checksums(image, chk_size, &stored_chksum, &computed_chksum) < 0)",
+      "function": "H5B2__cache_int_verify_chksum"
+    },
+    "H5B2cache.c:594": {
+      "text": "H5B2__cache_int_deserialize(const void *_image, size_t H5_ATTR_UNUSED len, void *_udata,",
+      "function": "H5B2__cache_int_deserialize"
+    },
+    "H5B2cache.c:659": {
+      "text": "        if ((udata->hdr->cls->decode)(image, native, udata->hdr->cb_ctx) < 0)",
+      "function": "H5B2__cache_int_deserialize"
+    },
+    "H5B2cache.c:672": {
+      "text": "        UINT64DECODE_VAR(image, node_nrec, udata->hdr->max_nrec_size);",
+      "function": "H5B2__cache_int_deserialize"
+    },
+    "H5B2cache.c:769": {
+      "text": "    assert((size_t)(image - (uint8_t *)_image) == (H5B2_INT_PREFIX_SIZE - H5B2_SIZEOF_CHKSUM));",
+      "function": "H5B2__cache_int_serialize"
+    },
+    "H5B2cache.c:954": {
+      "text": "H5B2__cache_leaf_verify_chksum(const void *_image, size_t H5_ATTR_UNUSED len, void *_udata)",
+      "function": "H5B2__cache_leaf_verify_chksum"
+    },
+    "H5B2cache.c:970": {
+      "text": "    chk_size = H5B2_LEAF_PREFIX_SIZE + (udata->nrec * udata->hdr->rrec_size);",
+      "function": "H5B2__cache_leaf_verify_chksum"
+    },
+    "H5B2cache.c:973": {
+      "text": "    if (H5F_get_checksums(image, chk_size, &stored_chksum, &computed_chksum) < 0)",
+      "function": "H5B2__cache_leaf_verify_chksum"
+    },
+    "H5B2cache.c:994": {
+      "text": "H5B2__cache_leaf_deserialize(const void *_image, size_t H5_ATTR_UNUSED len, void *_udata,",
+      "function": "H5B2__cache_leaf_deserialize"
+    },
+    "H5B2cache.c:1046": {
+      "text": "    for (u = 0; u < leaf->nrec; u++) {",
+      "function": "H5B2__cache_leaf_deserialize"
+    },
+    "H5B2cache.c:1048": {
+      "text": "        if ((udata->hdr->cls->decode)(image, native, udata->hdr->cb_ctx) < 0)",
+      "function": "H5B2__cache_leaf_deserialize"
+    },
+    "H5B2cache.c:1143": {
+      "text": "    assert((size_t)(image - (uint8_t *)_image) == (H5B2_LEAF_PREFIX_SIZE - H5B2_SIZEOF_CHKSUM));",
+      "function": "H5B2__cache_leaf_serialize"
+    },
+    "H5B2hdr.c:44": {
+      "text": "#define H5B2_NUM_LEAF_REC(n, r) (((n)-H5B2_LEAF_PREFIX_SIZE) / (r))",
+      "function": null
+    },
+    "H5B2hdr.c:107": {
+      "text": "    assert(hdr);",
+      "function": "H5B2__hdr_init"
+    },
+    "H5B2hdr.c:112": {
+      "text": "    assert(cparam->node_size > 0);",
+      "function": "H5B2__hdr_init"
+    },
+    "H5B2hdr.c:113": {
+      "text": "    assert(cparam->rrec_size > 0);",
+      "function": "H5B2__hdr_init"
+    },
+    "H5B2hdr.c:114": {
+      "text": "    assert(cparam->merge_percent > 0 && cparam->merge_percent <= 100);",
+      "function": "H5B2__hdr_init"
+    },
+    "H5B2hdr.c:116": {
+      "text": "    assert(cparam->merge_percent < (cparam->split_percent / 2));",
+      "function": "H5B2__hdr_init"
+    },
+    "H5B2hdr.c:131": {
+      "text": "    if (NULL == (hdr->page = H5FL_BLK_MALLOC(node_page, hdr->node_size)))",
+      "function": "H5B2__hdr_init"
+    },
+    "H5B2hdr.c:140": {
+      "text": "    sz_max_nrec = H5B2_NUM_LEAF_REC(hdr->node_size, hdr->rrec_size);",
+      "function": "H5B2__hdr_init"
+    },
+    "H5B2hdr.c:147": {
+      "text": "        (hdr->node_info[0].nat_rec_fac = H5FL_fac_init(hdr->cls->nrec_size * hdr->node_info[0].max_nrec)))",
+      "function": "H5B2__hdr_init"
+    },
+    "H5B2hdr.c:165": {
+      "text": "    assert(hdr->max_nrec_size <= H5B2_SIZEOF_RECORDS_PER_NODE);",
+      "function": "H5B2__hdr_init"
+    },
+    "H5B2hdr.c:172": {
+      "text": "            assert(hdr->node_info[u].max_nrec <= hdr->node_info[u - 1].max_nrec);",
+      "function": "H5B2__hdr_init"
+    },
+    "H5B2int.c:1652": {
+      "text": "    if (NULL == (native = (uint8_t *)H5FL_FAC_MALLOC(hdr->node_info[depth].nat_rec_fac)))",
+      "function": "H5B2__iterate_node"
+    },
+    "H5B2int.c:1678": {
+      "text": "            if ((ret_value = (op)(H5B2_NAT_NREC(native, hdr, u), op_data)) < 0)",
+      "function": "H5B2__iterate_node"
+    },
+    "H5B2internal.c:203": {
+      "text": "        (internal = (H5B2_internal_t *)H5AC_protect(hdr->f, H5AC_BT2_INT, node_ptr->addr, &udata, flags)))",
+      "function": "H5B2__protect_internal"
+    },
+    "H5B2leaf.c:107": {
+      "text": "    memset(leaf->leaf_native, 0, hdr->cls->nrec_size * hdr->node_info[0].max_nrec);",
+      "function": "H5B2__create_leaf"
+    },
+    "H5B2leaf.c:185": {
+      "text": "    udata.nrec   = node_ptr->node_nrec;",
+      "function": "H5B2__protect_leaf"
+    },
+    "H5B2leaf.c:188": {
+      "text": "    if (NULL == (leaf = (H5B2_leaf_t *)H5AC_protect(hdr->f, H5AC_BT2_LEAF, node_ptr->addr, &udata, flags)))",
+      "function": "H5B2__protect_leaf"
+    },
+    "H5B2leaf.c:344": {
+      "text": "    assert(curr_node_ptr->node_nrec < hdr->node_info[0].max_nrec);",
+      "function": "H5B2__insert_leaf"
+    },
+    "H5B2leaf.c:866": {
+      "text": "    assert(idx < leaf->nrec);",
+      "function": "H5B2__remove_leaf_by_idx"
+    },
+    "H5B2pkg.h:91": {
+      "text": "#define H5B2_LEAF_PREFIX_SIZE                                                                                \\",
+      "function": null
+    },
+    "H5B2pkg.h:109": {
+      "text": "#define H5B2_NUM_INT_REC(h, d)                                                                               \\",
+      "function": null
+    },
+    "H5B2pkg.h:110": {
+      "text": "    (((h)->node_size - (H5B2_INT_PREFIX_SIZE + H5B2_INT_POINTER_SIZE(h, d))) /                               \\",
+      "function": null
+    },
+    "H5Bcache.c:174": {
+      "text": "    if (udata->exp_level != H5B_UNKNOWN_NODELEVEL)",
+      "function": "H5B__cache_deserialize"
+    },
+    "H5Bcache.c:184": {
+      "text": "    if (bt->nchildren > shared->two_k)",
+      "function": "H5B__cache_deserialize"
+    },
+    "H5Centry.c:175": {
+      "text": "        H5C__UPDATE_RP_FOR_UNPIN(cache_ptr, entry_ptr, FAIL);",
+      "function": "H5C__unpin_entry_real"
+    },
+    "H5Centry.c:659": {
+      "text": "            (entry_ptr->type->notify)(H5C_NOTIFY_ACTION_BEFORE_EVICT, entry_ptr) < 0)",
+      "function": "H5C__flush_single_entry"
+    },
+    "H5Centry.c:976": {
+      "text": "            HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, \"actual len exceeds EOA\");",
+      "function": "H5C__verify_len_eoa"
+    },
+    "H5Centry.c:1045": {
+      "text": "    if (type->get_initial_load_size(udata, &len) < 0)",
+      "function": "H5C__load_entry"
+    },
+    "H5Centry.c:1052": {
+      "text": "    if (!(H5F_INTENT(f) & H5F_ACC_SWMR_READ)) {",
+      "function": "H5C__load_entry"
+    },
+    "H5Centry.c:1060": {
+      "text": "    if (NULL == (image = (uint8_t *)H5MM_malloc(len + H5C_IMAGE_EXTRA_SPACE)))",
+      "function": "H5C__load_entry"
+    },
+    "H5Centry.c:1217": {
+      "text": "            if (type->verify_chksum == NULL)",
+      "function": "H5C__load_entry"
+    },
+    "H5Centry.c:1221": {
+      "text": "            if ((chk_ret = type->verify_chksum(image, actual_len, udata)) < 0)",
+      "function": "H5C__load_entry"
+    },
+    "H5Centry.c:1247": {
+      "text": "    if (NULL == (thing = type->deserialize(image, len, udata, &dirty)))",
+      "function": "H5C__load_entry"
+    },
+    "H5Centry.c:1713": {
+      "text": "                assert(NULL == fd_children[fd_children_found]);",
+      "function": "H5C__destroy_pf_entry_child_flush_deps"
+    },
+    "H5Centry.c:1792": {
+      "text": "H5C__deserialize_prefetched_entry(H5F_t *f, H5C_t *cache_ptr, H5C_cache_entry_t **entry_ptr_ptr,",
+      "function": "H5C__deserialize_prefetched_entry"
+    },
+    "H5Centry.c:1876": {
+      "text": "        if (NULL == (fd_children = (H5C_cache_entry_t **)H5MM_calloc(",
+      "function": "H5C__deserialize_prefetched_entry"
+    },
+    "H5Centry.c:1886": {
+      "text": "     * no need for either a call to the get_initial_load_size() callback,",
+      "function": "H5C__deserialize_prefetched_entry"
+    },
+    "H5Centry.c:1891": {
+      "text": "    len = pf_entry_ptr->size;",
+      "function": "H5C__deserialize_prefetched_entry"
+    },
+    "H5Centry.c:1896": {
+      "text": "    if (NULL == (thing = type->deserialize(pf_entry_ptr->image_ptr, len, udata, &dirty)))",
+      "function": "H5C__deserialize_prefetched_entry"
+    },
+    "H5Centry.c:1897": {
+      "text": "        HGOTO_ERROR(H5E_CACHE, H5E_CANTLOAD, FAIL, \"Can't deserialize image\");",
+      "function": "H5C__deserialize_prefetched_entry"
+    },
+    "H5Centry.c:2032": {
+      "text": "#ifndef NDEGUG /* verify deletion */",
+      "function": "H5C__deserialize_prefetched_entry"
+    },
+    "H5Centry.c:2035": {
+      "text": "    assert(NULL == pf_entry_ptr);",
+      "function": "H5C__deserialize_prefetched_entry"
+    },
+    "H5Centry.c:2213": {
+      "text": "    assert(entry_ptr->size > 0);",
+      "function": "H5C_insert_entry"
+    },
+    "H5Centry.c:3036": {
+      "text": "        cache_ptr->load_image = false;",
+      "function": "H5C_protect"
+    },
+    "H5Centry.c:3037": {
+      "text": "        if (H5C__load_cache_image(f) < 0)",
+      "function": "H5C_protect"
+    },
+    "H5Centry.c:3064": {
+      "text": "            if (H5C__deserialize_prefetched_entry(f, cache_ptr, &entry_ptr, type, addr, udata) < 0)",
+      "function": "H5C_protect"
+    },
+    "H5Centry.c:3065": {
+      "text": "                HGOTO_ERROR(H5E_CACHE, H5E_CANTLOAD, NULL, \"can't deserialize prefetched entry\");",
+      "function": "H5C_protect"
+    },
+    "H5Centry.c:3153": {
+      "text": "        if (NULL == (thing = H5C__load_entry(f,",
+      "function": "H5C_protect"
+    },
+    "H5Centry.c:3839": {
+      "text": "        HGOTO_ERROR(H5E_CACHE, H5E_CANTDEPEND, FAIL, \"Child entry flush dependency parent can't be itself\");",
+      "function": "H5C_create_flush_dependency"
+    },
+    "H5Centry.c:3961": {
+      "text": "    assert(cache_ptr);",
+      "function": "H5C_destroy_flush_dependency"
+    },
+    "H5Centry.c:3962": {
+      "text": "    assert(cache_ptr == child_entry->cache_ptr);",
+      "function": "H5C_destroy_flush_dependency"
+    },
+    "H5Centry.c:3998": {
+      "text": "            if (H5C__unpin_entry_real(cache_ptr, parent_entry, true) < 0)",
+      "function": "H5C_destroy_flush_dependency"
+    },
+    "H5Centry.c:4110": {
+      "text": "    if (H5C__flush_single_entry(f, entry_ptr, flush_flags) < 0)",
+      "function": "H5C_expunge_entry"
+    },
+    "H5Cepoch.c:132": {
+      "text": "H5C__epoch_marker_verify_chksum(const void H5_ATTR_UNUSED *image_ptr, size_t H5_ATTR_UNUSED len,",
+      "function": "H5C__epoch_marker_verify_chksum"
+    },
+    "H5Cimage.c:262": {
+      "text": "H5C__construct_cache_image_buffer(H5F_t *f, H5C_t *cache_ptr)",
+      "function": "H5C__construct_cache_image_buffer"
+    },
+    "H5Cimage.c:301": {
+      "text": "    /* Compute the checksum and encode */",
+      "function": "H5C__construct_cache_image_buffer"
+    },
+    "H5Cimage.c:302": {
+      "text": "    chksum = H5_checksum_metadata(cache_ptr->image_buffer,",
+      "function": "H5C__construct_cache_image_buffer"
+    },
+    "H5Cimage.c:549": {
+      "text": "H5C__read_cache_image(H5F_t *f, H5C_t *cache_ptr)",
+      "function": "H5C__read_cache_image"
+    },
+    "H5Cimage.c:615": {
+      "text": "herr_t",
+      "function": "H5C__read_cache_image"
+    },
+    "H5Cimage.c:640": {
+      "text": "        assert(cache_ptr->image_len > 0);",
+      "function": "H5C__load_cache_image"
+    },
+    "H5Cimage.c:644": {
+      "text": "        if (NULL == (cache_ptr->image_buffer = H5MM_malloc(cache_ptr->image_len + 1)))",
+      "function": "H5C__load_cache_image"
+    },
+    "H5Cimage.c:652": {
+      "text": "        if (H5C__reconstruct_cache_contents(f, cache_ptr) < 0)",
+      "function": "H5C__load_cache_image"
+    },
+    "H5Cimage.c:754": {
+      "text": "H5C__image_entry_cmp(const void *_entry1, const void *_entry2)",
+      "function": "H5C__image_entry_cmp"
+    },
+    "H5Cimage.c:1061": {
+      "text": "                  sizeof(H5C_image_entry_t), H5C__image_entry_cmp);",
+      "function": "H5C__prep_image_for_file_close"
+    },
+    "H5Cimage.c:1460": {
+      "text": "    assert((is_fd_child && fd_parent_count > 0) || (!is_fd_child && fd_parent_count == 0));",
+      "function": "H5C__decode_cache_image_entry"
+    },
+    "H5Cimage.c:1463": {
+      "text": "    INT32DECODE(p, lru_rank);",
+      "function": "H5C__decode_cache_image_entry"
+    },
+    "H5Cimage.c:1464": {
+      "text": "    assert((in_lru && lru_rank >= 0) || (!in_lru && lru_rank == -1));",
+      "function": "H5C__decode_cache_image_entry"
+    },
+    "H5Cimage.c:1648": {
+      "text": "        flags |= H5C__MDCI_ENTRY_DIRTY_FLAG;",
+      "function": "H5C__encode_cache_image_entry"
+    },
+    "H5Cimage.c:2349": {
+      "text": "    /* Now scan the LRU list to set the lru_rank fields of all entries",
+      "function": "H5C__prep_for_file_close__scan_entries"
+    },
+    "H5Cimage.c:2418": {
+      "text": "        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, \"duplicate addresses found\");",
+      "function": "H5C__check_for_duplicates"
+    },
+    "H5Cimage.c:2446": {
+      "text": "H5C__reconstruct_cache_contents(H5F_t *f, H5C_t *cache_ptr)",
+      "function": "H5C__reconstruct_cache_contents"
+    },
+    "H5Cimage.c:2473": {
+      "text": "    assert((size_t)(p - (uint8_t *)cache_ptr->image_buffer) < cache_ptr->image_len);",
+      "function": "H5C__reconstruct_cache_contents"
+    },
+    "H5Cimage.c:2481": {
+      "text": "    image_len = cache_ptr->image_len;",
+      "function": "H5C__reconstruct_cache_contents"
+    },
+    "H5Cimage.c:2510": {
+      "text": "        H5C__INSERT_IN_INDEX(cache_ptr, pf_entry_ptr, FAIL);",
+      "function": "H5C__reconstruct_cache_contents"
+    },
+    "H5Cimage.c:2517": {
+      "text": "        H5C__UPDATE_RP_FOR_INSERT_APPEND(cache_ptr, pf_entry_ptr, FAIL);",
+      "function": "H5C__reconstruct_cache_contents"
+    },
+    "H5Cimage.c:2533": {
+      "text": "                HGOTO_ERROR(H5E_CACHE, H5E_NOTFOUND, FAIL, \"fd parent not in cache?!?\");",
+      "function": "H5C__reconstruct_cache_contents"
+    },
+    "H5Cimage.c:2537": {
+      "text": "            assert(parent_ptr->lru_rank == -1);",
+      "function": "H5C__reconstruct_cache_contents"
+    },
+    "H5Cimage.c:2547": {
+      "text": "                HGOTO_ERROR(H5E_CACHE, H5E_CANTDEPEND, FAIL, \"Can't restore flush dependency\");",
+      "function": "H5C__reconstruct_cache_contents"
+    },
+    "H5Cimage.c:2575": {
+      "text": "            assert(pf_entry_ptr->fd_child_count == pf_entry_ptr->flush_dep_nchildren);",
+      "function": "H5C__reconstruct_cache_contents"
+    },
+    "H5Cimage.c:2582": {
+      "text": "    /* Scan the LRU, and verify the expected ordering of the",
+      "function": "H5C__reconstruct_cache_contents"
+    },
+    "H5Cimage.c:2586": {
+      "text": "        int                lru_rank_holes = 0;",
+      "function": "H5C__reconstruct_cache_contents"
+    },
+    "H5Cimage.c:2631": {
+      "text": "        if (H5C__make_space_in_cache(f, 0, write_permitted) < 0)",
+      "function": "H5C__reconstruct_cache_contents"
+    },
+    "H5Cimage.c:2635": {
+      "text": "done:",
+      "function": "H5C__reconstruct_cache_contents"
+    },
+    "H5Cimage.c:2657": {
+      "text": "            if (H5AC_expunge_entry(f, H5AC_PREFETCHED_ENTRY, addr, H5AC__NO_FLAGS_SET) < 0) {",
+      "function": "H5C__reconstruct_cache_contents"
+    },
+    "H5Cimage.c:2663": {
+      "text": "                HDONE_ERROR(H5E_FILE, H5E_CANTEXPUNGE, FAIL, \"unable to expunge driver info block\");",
+      "function": "H5C__reconstruct_cache_contents"
+    },
+    "H5Cimage.c:2667": {
+      "text": "            H5MM_xfree(recon_entry);",
+      "function": "H5C__reconstruct_cache_contents"
+    },
+    "H5Cimage.c:2700": {
+      "text": "static H5C_cache_entry_t *",
+      "function": "H5C__reconstruct_cache_contents"
+    },
+    "H5Cimage.c:2701": {
+      "text": "H5C__reconstruct_cache_entry(const H5F_t *f, H5C_t *cache_ptr, hsize_t *buf_size, const uint8_t **buf)",
+      "function": "H5C__reconstruct_cache_entry"
+    },
+    "H5Cimage.c:2738": {
+      "text": "    if (pf_entry_ptr->prefetch_type_id < H5AC_BT_ID || pf_entry_ptr->prefetch_type_id >= H5AC_NTYPES)",
+      "function": "H5C__reconstruct_cache_entry"
+    },
+    "H5Cimage.c:2744": {
+      "text": "    flags = *p++;",
+      "function": "H5C__reconstruct_cache_entry"
+    },
+    "H5Cimage.c:2774": {
+      "text": "    if (pf_entry_ptr->ring >= (uint8_t)(H5C_RING_NTYPES))",
+      "function": "H5C__reconstruct_cache_entry"
+    },
+    "H5Cimage.c:2787": {
+      "text": "    UINT16DECODE(p, pf_entry_ptr->fd_child_count);",
+      "function": "H5C__reconstruct_cache_entry"
+    },
+    "H5Cimage.c:2788": {
+      "text": "    if (is_fd_parent && pf_entry_ptr->fd_child_count <= 0)",
+      "function": "H5C__reconstruct_cache_entry"
+    },
+    "H5Cimage.c:2805": {
+      "text": "    UINT16DECODE(p, pf_entry_ptr->fd_parent_count);",
+      "function": "H5C__reconstruct_cache_entry"
+    },
+    "H5Cimage.c:2806": {
+      "text": "    assert((is_fd_child && pf_entry_ptr->fd_parent_count > 0) ||",
+      "function": "H5C__reconstruct_cache_entry"
+    },
+    "H5Cimage.c:2812": {
+      "text": "    INT32DECODE(p, pf_entry_ptr->lru_rank);",
+      "function": "H5C__reconstruct_cache_entry"
+    },
+    "H5Cimage.c:2813": {
+      "text": "    assert((in_lru && pf_entry_ptr->lru_rank >= 0) || (!in_lru && pf_entry_ptr->lru_rank == -1));",
+      "function": "H5C__reconstruct_cache_entry"
+    },
+    "H5Cimage.c:2820": {
+      "text": "    /* Validate address range */",
+      "function": "H5C__reconstruct_cache_entry"
+    },
+    "H5Cimage.c:2829": {
+      "text": "    H5F_DECODE_LENGTH(f, p, pf_entry_ptr->size);",
+      "function": "H5C__reconstruct_cache_entry"
+    },
+    "H5Cimage.c:2859": {
+      "text": "    if (NULL == (pf_entry_ptr->image_ptr = H5MM_malloc(pf_entry_ptr->size + H5C_IMAGE_EXTRA_SPACE)))",
+      "function": "H5C__reconstruct_cache_entry"
+    },
+    "H5Cimage.c:2867": {
+      "text": "    if (H5_IS_BUFFER_OVERFLOW(p, pf_entry_ptr->size, p_end))",
+      "function": "H5C__reconstruct_cache_entry"
+    },
+    "H5Cimage.c:2869": {
+      "text": "    H5MM_memcpy(pf_entry_ptr->image_ptr, p, pf_entry_ptr->size);",
+      "function": "H5C__reconstruct_cache_entry"
+    },
+    "H5Cint.c:1895": {
+      "text": "                    if ((cache_ptr->index_size + space_needed) > cache_ptr->max_cache_size)",
+      "function": "H5C__make_space_in_cache"
+    },
+    "H5Cprefetched.c:138": {
+      "text": "H5C__prefetched_entry_verify_chksum(const void H5_ATTR_UNUSED *image_ptr, size_t H5_ATTR_UNUSED len,",
+      "function": "H5C__prefetched_entry_verify_chksum"
+    },
+    "H5Cprefetched.c:233": {
+      "text": "        case H5C_NOTIFY_ACTION_BEFORE_EVICT:",
+      "function": "H5C__prefetched_entry_notify"
+    },
+    "H5Cprefetched.c:244": {
+      "text": "                if (H5C_destroy_flush_dependency(parent_ptr, entry_ptr) < 0)",
+      "function": "H5C__prefetched_entry_notify"
+    },
+    "H5Cprivate.h:880": {
+      "text": "    H5C_free_icr_func_t              free_icr;",
+      "function": null
+    },
+    "H5Dbtree.c:434": {
+      "text": "    assert(lt_key->nbytes > 0);",
+      "function": "H5D__btree_found"
+    },
+    "H5Dbtree.c:436": {
+      "text": "    udata->chunk_block.length = lt_key->nbytes;",
+      "function": "H5D__btree_found"
+    },
+    "H5Dbtree.c:636": {
+      "text": "        HGOTO_ERROR(H5E_DATASET, H5E_BADVALUE, FAIL, \"bad number of dimensions\");",
+      "function": "H5D__btree_decode_key"
+    },
+    "H5Dbtree.c:647": {
+      "text": "            HGOTO_ERROR(H5E_DATASET, H5E_BADVALUE, FAIL, \"bad coordinate offset\");",
+      "function": "H5D__btree_decode_key"
+    },
+    "H5Dchunk.c:792": {
+      "text": "        HGOTO_ERROR(H5E_DATASET, H5E_BADVALUE, FAIL, \"number of dimensions cannot be zero\");",
+      "function": "H5D__chunk_set_info_real"
+    },
+    "H5Dchunk.c:795": {
+      "text": "    layout->nchunks     = 1;",
+      "function": "H5D__chunk_set_info_real"
+    },
+    "H5Dchunk.c:799": {
+      "text": "        layout->chunks[u] = ((curr_dims[u] + layout->dim[u]) - 1) / layout->dim[u];",
+      "function": "H5D__chunk_set_info_real"
+    },
+    "H5Dchunk.c:843": {
+      "text": "    if (H5D__chunk_set_info_real(&dset->shared->layout.u.chunk, dset->shared->ndims, dset->shared->curr_dims,",
+      "function": "H5D__chunk_set_info"
+    },
+    "H5Dchunk.c:882": {
+      "text": "    if (dset->shared->layout.u.chunk.dim[dset->shared->layout.u.chunk.ndims - 1]) {",
+      "function": "H5D__chunk_set_sizes"
+    },
+    "H5Dchunk.c:915": {
+      "text": "    /* Compute and store the total size of a chunk */",
+      "function": "H5D__chunk_set_sizes"
+    },
+    "H5Dchunk.c:917": {
+      "text": "    for (u = 1, chunk_size = (uint64_t)dset->shared->layout.u.chunk.dim[0];",
+      "function": "H5D__chunk_set_sizes"
+    },
+    "H5Dchunk.c:925": {
+      "text": "    if ((uint64_t)dset->shared->layout.u.chunk.size != chunk_size)",
+      "function": "H5D__chunk_set_sizes"
+    },
+    "H5Dchunk.c:983": {
+      "text": "    if (layout->u.chunk.size > (hsize_t)0xffffffff) {",
+      "function": "H5D__chunk_construct"
+    },
+    "H5Dchunk.c:1021": {
+      "text": "            if (1 == unlim_count) { /* Chunked dataset with only 1 unlimited dimension */",
+      "function": "H5D__chunk_construct"
+    },
+    "H5Dchunk.c:1122": {
+      "text": "    for (u = 0; u < layout->u.chunk.ndims - 1; u++) {",
+      "function": "H5D__chunk_construct"
+    },
+    "H5Dchunk.c:1205": {
+      "text": "    if (dset->shared->ndims > 1) {",
+      "function": "H5D__chunk_init"
+    },
+    "H5Dchunk.c:1213": {
+      "text": "                HGOTO_ERROR(H5E_DATASET, H5E_BADVALUE, FAIL, \"chunk size must be > 0, dim = %u \", u);",
+      "function": "H5D__chunk_init"
+    },
+    "H5Dchunk.c:1241": {
+      "text": "    if (H5D__chunk_set_info(dset) < 0)",
+      "function": "H5D__chunk_init"
+    },
+    "H5Dchunk.c:1245": {
+      "text": "    if (open_op && (H5D__chunk_set_sizes(dset) < 0))",
+      "function": "H5D__chunk_init"
+    },
+    "H5Dchunk.c:1248": {
+      "text": "    /* Check for chunk larger than can be represented in 32-bits encoded as v1 b-tree. We don't allow creation",
+      "function": "H5D__chunk_init"
+    },
+    "H5Dchunk.c:1251": {
+      "text": "    if (dset->shared->layout.u.chunk.size > (hsize_t)0xffffffff &&",
+      "function": "H5D__chunk_init"
+    },
+    "H5Dchunk.c:3117": {
+      "text": "            assert((H5_addr_defined(udata.chunk_block.offset) && udata.chunk_block.length > 0) ||",
+      "function": "H5D__chunk_read"
+    },
+    "H5Dchunk.c:3354": {
+      "text": "                        if (H5D__chunk_lock(io_info, dset_info, udata_p, &chunk, false, false,",
+      "function": "H5D__chunk_read"
+    },
+    "H5Dchunk.c:5317": {
+      "text": "    assert(layout->u.chunk.size > 0);",
+      "function": "H5D__chunk_lock"
+    },
+    "H5Dchunk.c:5545": {
+      "text": "                        if (H5Z_pipeline(old_pline, H5Z_FLAG_REVERSE, &(udata->filter_mask), err_detect,",
+      "function": "H5D__chunk_lock"
+    },
+    "H5Dchunk.c:5549": {
+      "text": "                        /* Make sure the chunk is the correct size after being unfiltered */",
+      "function": "H5D__chunk_lock"
+    },
+    "H5Dchunk.c:5550": {
+      "text": "                        if (chunk_nbytes != chunk_size)",
+      "function": "H5D__chunk_lock"
+    },
+    "H5Dchunk.c:7692": {
+      "text": "    /* Need to uncompress filtered variable-length & reference data elements that are not found in chunk cache",
+      "function": "H5D__chunk_copy_cb"
+    },
+    "H5Dcompact.c:409": {
+      "text": "        if ((ret_value = H5VM_memcpyvv(dset_info->buf.vp, mem_max_nseq, mem_curr_seq, mem_size_arr,",
+      "function": "H5D__compact_readvv"
+    },
+    "H5Dcompact.c:467": {
+      "text": "        if ((ret_value = H5VM_memcpyvv(dset_info->store->compact.buf, dset_max_nseq, dset_curr_seq,",
+      "function": "H5D__compact_writevv"
+    },
+    "H5Dcontig.c:227": {
+      "text": "    store.contig.dset_size = dset->shared->layout.storage.u.contig.size;",
+      "function": "H5D__contig_fill"
+    },
+    "H5Dcontig.c:391": {
+      "text": "    /* Compute the size of the dataset's contiguous storage */",
+      "function": "H5D__contig_check"
+    },
+    "H5Dcontig.c:399": {
+      "text": "    if (H5_addr_defined(layout->storage.u.contig.addr)) {",
+      "function": "H5D__contig_check"
+    },
+    "H5Dcontig.c:408": {
+      "text": "        if (H5_addr_le((layout->storage.u.contig.addr + data_size), layout->storage.u.contig.addr))",
+      "function": "H5D__contig_check"
+    },
+    "H5Dcontig.c:409": {
+      "text": "            HGOTO_ERROR(H5E_DATASET, H5E_OVERFLOW, FAIL, \"invalid dataset size, likely file corruption\");",
+      "function": "H5D__contig_check"
+    },
+    "H5Dcontig.c:411": {
+      "text": "            HGOTO_ERROR(H5E_DATASET, H5E_OVERFLOW, FAIL, \"invalid dataset size, likely file corruption\");",
+      "function": "H5D__contig_check"
+    },
+    "H5Dcontig.c:528": {
+      "text": "    if (H5D__contig_check(f, &dset->shared->layout, H5S_GET_EXTENT(dset->shared->space), dset->shared->type) <",
+      "function": "H5D__contig_init"
+    },
+    "H5Dcontig.c:536": {
+      "text": "    if (dset->shared->layout.version < 3) {",
+      "function": "H5D__contig_init"
+    },
+    "H5Dearray.c:1200": {
+      "text": "        udata->chunk_block.length = idx_info->layout->u.chunk.size;",
+      "function": "H5D__earray_idx_get_addr"
+    },
+    "H5Dearray.c:1370": {
+      "text": "H5D__earray_idx_iterate(const H5D_chk_idx_info_t *idx_info, H5D_chunk_cb_func_t chunk_cb, void *chunk_udata)",
+      "function": "H5D__earray_idx_iterate"
+    },
+    "H5Defl.c:318": {
+      "text": "        if (H5_combine_path(dset->shared->extfile_prefix, efl->slot[u].name, &full_name) < 0)",
+      "function": "H5D__efl_read"
+    },
+    "H5Defl.c:320": {
+      "text": "        if ((fd = HDopen(full_name, O_RDONLY)) < 0)",
+      "function": "H5D__efl_read"
+    },
+    "H5Defl.c:432": {
+      "text": "        if (H5_combine_path(dset->shared->extfile_prefix, efl->slot[u].name, &full_name) < 0)",
+      "function": "H5D__efl_write"
+    },
+    "H5Dfarray.c:850": {
+      "text": "    cparam.nelmts = idx_info->layout->u.chunk.max_nchunks;",
+      "function": "H5D__farray_idx_create"
+    },
+    "H5Dfarray.c:1129": {
+      "text": "        udata->chunk_block.length = idx_info->layout->u.chunk.size;",
+      "function": "H5D__farray_idx_get_addr"
+    },
+    "H5Dfill.c:254": {
+      "text": "            if (H5S_select_fill(fill_buf, dst_type_size, space, buf) < 0)",
+      "function": "H5D__fill"
+    },
+    "H5Dint.c:230": {
+      "text": "    H5D_prefix_ext_env = getenv(\"HDF5_EXTFILE_PREFIX\");",
+      "function": "H5D__init_package"
+    },
+    "H5Dint.c:2580": {
+      "text": "                *storage_size = dset->shared->layout.storage.u.contig.size;",
+      "function": "H5D__get_storage_size"
+    },
+    "H5Dint.c:3957": {
+      "text": "    if (dset->shared->layout.type == H5D_VIRTUAL)",
+      "function": "H5D__get_space"
+    },
+    "H5Dio.c:266": {
+      "text": "                if (H5D__fill(dset_info[i].dset->shared->dcpl_cache.fill.buf, dset_info[i].dset->shared->type,",
+      "function": "H5D__read"
+    },
+    "H5Dio.c:398": {
+      "text": "            if ((*dset_info[i].io_ops.multi_read)(&io_info, &dset_info[i]) < 0) {",
+      "function": "H5D__read"
+    },
+    "H5Dio.c:980": {
+      "text": "        io_info->may_use_in_place_tconv = true;",
+      "function": "H5D__ioinfo_init"
+    },
+    "H5Dio.c:1435": {
+      "text": "            /* Set up datatype conversion/background buffers */",
+      "function": "H5D__typeinfo_init_phase3"
+    },
+    "H5Dio.c:1436": {
+      "text": "            target_size = max_temp_buf;",
+      "function": "H5D__typeinfo_init_phase3"
+    },
+    "H5Dlayout.c:190": {
+      "text": "                assert(layout->u.chunk.ndims > 0 && layout->u.chunk.ndims <= H5O_LAYOUT_NDIMS);",
+      "function": "H5D__layout_meta_size"
+    },
+    "H5Dsingle.c:328": {
+      "text": "        udata->chunk_block.length = idx_info->layout->u.chunk.size;",
+      "function": "H5D__single_idx_get_addr"
+    },
+    "H5Dvirtual.c:192": {
+      "text": "H5D_virtual_check_mapping_pre(const H5S_t *vspace, const H5S_t *src_space,",
+      "function": "H5D_virtual_check_mapping_pre"
+    },
+    "H5Dvirtual.c:391": {
+      "text": "H5D_virtual_check_min_dims(const H5D_t *dset)",
+      "function": "H5D_virtual_check_min_dims"
+    },
+    "H5Dvirtual.c:639": {
+      "text": "        chksum = H5_checksum_metadata(heap_block, block_size - (size_t)4, 0);",
+      "function": "H5D__virtual_store_layout"
+    },
+    "H5Dvirtual.c:704": {
+      "text": "        /* Number of entries */",
+      "function": "H5D__virtual_load_layout"
+    },
+    "H5Dvirtual.c:707": {
+      "text": "        H5F_DECODE_LENGTH(f, heap_block_p, tmp_hsize);",
+      "function": "H5D__virtual_load_layout"
+    },
+    "H5Dvirtual.c:711": {
+      "text": "            if (NULL == (layout->storage.u.virt.list = (H5O_storage_virtual_ent_t *)H5MM_calloc(",
+      "function": "H5D__virtual_load_layout"
+    },
+    "H5Dvirtual.c:795": {
+      "text": "                    H5D_VIRTUAL_FIND_OR_ADD_NAME(file, layout, heap_block_p, tmp_size - 1, ent, FAIL);",
+      "function": "H5D__virtual_load_layout"
+    },
+    "H5Dvirtual.c:843": {
+      "text": "            if (H5S_SELECT_DESERIALIZE(&ent->source_select, &heap_block_p, (size_t)(avail_buffer_space)) < 0)",
+      "function": "H5D__virtual_load_layout"
+    },
+    "H5Dvirtual.c:881": {
+      "text": "            ent->unlim_dim_virtual    = H5S_get_select_unlim_dim(ent->source_dset.virtual_select);",
+      "function": "H5D__virtual_load_layout"
+    },
+    "H5Dvirtual.c:1148": {
+      "text": "done:",
+      "function": "H5D__virtual_copy_layout"
+    },
+    "H5Dvirtual.c:1160": {
+      "text": " * Purpose:     Frees internal structures in a virtual storage layout",
+      "function": "H5D__virtual_copy_layout"
+    },
+    "H5Dvirtual.c:1407": {
+      "text": "        intent = H5F_INTENT(vdset->oloc.file);",
+      "function": "H5D__virtual_open_source_dset"
+    },
+    "H5Dvirtual.c:1490": {
+      "text": "    if (source_dset->dset) {",
+      "function": "H5D__virtual_reset_source_dset"
+    },
+    "H5Dvirtual.c:1923": {
+      "text": "H5D__virtual_set_extent_unlim(const H5D_t *dset)",
+      "function": "H5D__virtual_set_extent_unlim"
+    },
+    "H5Dvirtual.c:2406": {
+      "text": "H5D__virtual_init_all(const H5D_t *dset)",
+      "function": "H5D__virtual_init_all"
+    },
+    "H5Dvirtual.c:2740": {
+      "text": "        if (H5S_extent_copy(storage->list[i].source_dset.virtual_select, dset->shared->space) < 0)",
+      "function": "H5D__virtual_init"
+    },
+    "H5EA.c:417": {
+      "text": "                                                       hdr->sblk_info[sblk_idx].dblk_nelmts, thing_acc)))",
+      "function": "H5EA__lookup_elmt"
+    },
+    "H5EA.c:576": {
+      "text": "                if (NULL == (dblock = H5EA__dblock_protect(hdr, sblock, sblock->dblk_addrs[dblk_idx],",
+      "function": "H5EA__lookup_elmt"
+    },
+    "H5EA.c:985": {
+      "text": "    for (u = 0; u < ea->hdr->stats.stored.max_idx_set && ret_value == H5_ITER_CONT; u++) {",
+      "function": "H5EA_iterate"
+    },
+    "H5EAcache.c:320": {
+      "text": "    hdr->cparam.raw_elmt_size = *image++; /* Element size in file (in bytes) */",
+      "function": "H5EA__cache_hdr_deserialize"
+    },
+    "H5EAcache.c:336": {
+      "text": "    H5F_DECODE_LENGTH(udata->f, image, hdr->stats.stored.max_idx_set);    /* Max. index set (+1) */",
+      "function": "H5EA__cache_hdr_deserialize"
+    },
+    "H5EAcache.c:1011": {
+      "text": "        assert(sblock.dblk_npages > 1);",
+      "function": "H5EA__cache_sblock_get_initial_load_size"
+    },
+    "H5EAcache.c:1418": {
+      "text": "    dblock.nelmts = udata->nelmts;",
+      "function": "H5EA__cache_dblock_get_initial_load_size"
+    },
+    "H5EAcache.c:1423": {
+      "text": "        assert(udata->nelmts == (dblock.npages * udata->hdr->dblk_page_nelmts));",
+      "function": "H5EA__cache_dblock_get_initial_load_size"
+    },
+    "H5EAcache.c:1430": {
+      "text": "        *image_len = H5EA_DBLOCK_PREFIX_SIZE(&dblock);",
+      "function": "H5EA__cache_dblock_get_initial_load_size"
+    },
+    "H5EAcache.c:1481": {
+      "text": "H5EA__cache_dblock_deserialize(const void *_image, size_t H5_ATTR_NDEBUG_UNUSED len, void *_udata,",
+      "function": "H5EA__cache_dblock_deserialize"
+    },
+    "H5EAcache.c:1596": {
+      "text": "        *image_len = (size_t)H5EA_DBLOCK_PREFIX_SIZE(dblock);",
+      "function": "H5EA__cache_dblock_image_len"
+    },
+    "H5EAhdr.c:180": {
+      "text": "    assert(hdr->cparam.max_nelmts_bits);",
+      "function": "H5EA__hdr_init"
+    },
+    "H5EAhdr.c:185": {
+      "text": "    hdr->nsblks           = 1 + (hdr->cparam.max_nelmts_bits - H5VM_log2_of2(hdr->cparam.data_blk_min_elmts));",
+      "function": "H5EA__hdr_init"
+    },
+    "H5EAhdr.c:245": {
+      "text": "    idx = H5VM_log2_of2((uint32_t)nelmts) - H5VM_log2_of2((uint32_t)hdr->cparam.data_blk_min_elmts);",
+      "function": "H5EA__hdr_alloc_elmts"
+    },
+    "H5EAhdr.c:316": {
+      "text": "    assert(idx < hdr->elmt_fac.nalloc);",
+      "function": "H5EA__hdr_free_elmts"
+    },
+    "H5EAhdr.c:346": {
+      "text": "#ifndef NDEBUG",
+      "function": "H5EA__hdr_create"
+    },
+    "H5EAiblock.c:113": {
+      "text": "    iblock->nsblks      = H5EA_SBLK_FIRST_IDX(hdr->cparam.sup_blk_min_data_ptrs);",
+      "function": "H5EA__iblock_alloc"
+    },
+    "H5F.c:820": {
+      "text": "    if ((ret_value = H5F__open_api_common(filename, flags, fapl_id, NULL)) < 0)",
+      "function": "H5Fopen"
+    },
+    "H5FAcache.c:225": {
+      "text": "H5FA__cache_hdr_deserialize(const void *_image, size_t H5_ATTR_NDEBUG_UNUSED len, void *_udata,",
+      "function": "H5FA__cache_hdr_deserialize"
+    },
+    "H5FAcache.c:559": {
+      "text": "        *image_len = (size_t)H5FA_DBLOCK_PREFIX_SIZE(&dblock);",
+      "function": "H5FA__cache_dblock_get_initial_load_size"
+    },
+    "H5FAcache.c:610": {
+      "text": "H5FA__cache_dblock_deserialize(const void *_image, size_t H5_ATTR_NDEBUG_UNUSED len, void *_udata,",
+      "function": "H5FA__cache_dblock_deserialize"
+    },
+    "H5FAcache.c:721": {
+      "text": "        *image_len = H5FA_DBLOCK_PREFIX_SIZE(dblock);",
+      "function": "H5FA__cache_dblock_image_len"
+    },
+    "H5FAdblock.c:123": {
+      "text": "        dblock->dblk_page_init_size = (dblock->npages + 7) / 8;",
+      "function": "H5FA__dblock_alloc"
+    },
+    "H5FD.c:680": {
+      "text": "H5FD_sb_load(H5FD_t *file, const char *name, const uint8_t *buf)",
+      "function": "H5FD_sb_load"
+    },
+    "H5FD.c:693": {
+      "text": "    if (!strncmp(name, \"NCSAfami\", (size_t)8) && strcmp(file->cls->name, \"family\") != 0)",
+      "function": "H5FD_sb_load"
+    },
+    "H5FDfamily.c:602": {
+      "text": "    UINT64DECODE(buf, msize);",
+      "function": "H5FD__family_sb_decode"
+    },
+    "H5FDint.c:258": {
+      "text": "            HGOTO_ERROR(H5E_ARGS, H5E_OVERFLOW, FAIL, \"addr overflow, addr = %llu, size = %llu, eoa = %llu\",",
+      "function": "H5FD_read"
+    },
+    "H5FDmulti.c:46": {
+      "text": "#define UNIQUE_MEMBERS_CORE(MAP, ITER, SEEN, LOOPVAR)                                                        \\",
+      "function": null
+    },
+    "H5FDmulti.c:56": {
+      "text": "            assert(LOOPVAR > 0 && LOOPVAR < H5FD_MEM_NTYPES);                                                \\",
+      "function": null
+    },
+    "H5FDmulti.c:745": {
+      "text": "H5FD_multi_sb_decode(H5FD_t *_file, const char *name, const unsigned char *buf)",
+      "function": "H5FD_multi_sb_decode"
+    },
+    "H5FDmulti.c:780": {
+      "text": "        map[i + 1] = (H5FD_mem_t)buf[i];",
+      "function": "H5FD_multi_sb_decode"
+    },
+    "H5FDmulti.c:785": {
+      "text": "    UNIQUE_MEMBERS (map, mt) {",
+      "function": "H5FD_multi_sb_decode"
+    },
+    "H5FDmulti.c:793": {
+      "text": "    memcpy(x, buf, (nseen * 2 * 8));",
+      "function": "H5FD_multi_sb_decode"
+    },
+    "H5FDmulti.c:807": {
+      "text": "    UNIQUE_MEMBERS (map, mt) {",
+      "function": "H5FD_multi_sb_decode"
+    },
+    "H5FDmulti.c:809": {
+      "text": "        memb_name[_unmapped] = (const char *)buf;",
+      "function": "H5FD_multi_sb_decode"
+    },
+    "H5FDmulti.c:857": {
+      "text": "    if (open_members(file) < 0)",
+      "function": "H5FD_multi_sb_decode"
+    },
+    "H5FDmulti.c:1917": {
+      "text": "        nchars = snprintf(tmp, sizeof(tmp), file->fa.memb_name[mt], file->name);",
+      "function": "open_members"
+    },
+    "H5FDmulti.c:1992": {
+      "text": "        nchars = snprintf(full_filename, sizeof(full_filename), fa->memb_name[mt], filename);",
+      "function": "H5FD_multi_delete"
+    },
+    "H5FDsubfiling/H5FDsubfiling.c:1026": {
+      "text": "        if (H5FD_sb_load(file->sf_file, (const char *)p, p + 9) < 0)",
+      "function": "H5FD__subfiling_sb_decode"
+    },
+    "H5FL.c:773": {
+      "text": "        if (NULL == (temp = (H5FL_blk_list_t *)H5FL__malloc(sizeof(H5FL_blk_list_t) + size)))",
+      "function": "H5FL_blk_malloc"
+    },
+    "H5FScache.c:217": {
+      "text": "H5FS__cache_hdr_deserialize(const void *_image, size_t H5_ATTR_NDEBUG_UNUSED len, void *_udata,",
+      "function": "H5FS__cache_hdr_deserialize"
+    },
+    "H5FScache.c:255": {
+      "text": "    /* Total space tracked */",
+      "function": "H5FS__cache_hdr_deserialize"
+    },
+    "H5FScache.c:258": {
+      "text": "    /* Total # of free space sections tracked */",
+      "function": "H5FS__cache_hdr_deserialize"
+    },
+    "H5FScache.c:270": {
+      "text": "    if (fspace->nclasses > 0 && nclasses > fspace->nclasses)",
+      "function": "H5FS__cache_hdr_deserialize"
+    },
+    "H5FScache.c:282": {
+      "text": "    UINT16DECODE(image, fspace->max_sect_addr);",
+      "function": "H5FS__cache_hdr_deserialize"
+    },
+    "H5FScache.c:922": {
+      "text": "H5FS__cache_sinfo_deserialize(const void *_image, size_t H5_ATTR_NDEBUG_UNUSED len, void *_udata,",
+      "function": "H5FS__cache_sinfo_deserialize"
+    },
+    "H5FScache.c:967": {
+      "text": "    if (fspace->serial_sect_count > 0) {",
+      "function": "H5FS__cache_sinfo_deserialize"
+    },
+    "H5FScache.c:995": {
+      "text": "            UINT64DECODE_VAR(image, node_count, sect_cnt_size);",
+      "function": "H5FS__cache_sinfo_deserialize"
+    },
+    "H5FScache.c:996": {
+      "text": "            assert(node_count);",
+      "function": "H5FS__cache_sinfo_deserialize"
+    },
+    "H5FScache.c:998": {
+      "text": "            /* The size of the sections for this node */",
+      "function": "H5FS__cache_sinfo_deserialize"
+    },
+    "H5FScache.c:999": {
+      "text": "            UINT64DECODE_VAR(image, sect_size, sinfo->sect_len_size);",
+      "function": "H5FS__cache_sinfo_deserialize"
+    },
+    "H5FScache.c:1000": {
+      "text": "            assert(sect_size);",
+      "function": "H5FS__cache_sinfo_deserialize"
+    },
+    "H5FScache.c:1010": {
+      "text": "                UINT64DECODE_VAR(image, sect_addr, sinfo->sect_off_size);",
+      "function": "H5FS__cache_sinfo_deserialize"
+    },
+    "H5FScache.c:1013": {
+      "text": "                sect_type = *image++;",
+      "function": "H5FS__cache_sinfo_deserialize"
+    },
+    "H5FScache.c:1019": {
+      "text": "                if (sect_type >= fspace->nclasses)",
+      "function": "H5FS__cache_sinfo_deserialize"
+    },
+    "H5FScache.c:1024": {
+      "text": "                assert(fspace->sect_cls[sect_type].deserialize);",
+      "function": "H5FS__cache_sinfo_deserialize"
+    },
+    "H5FScache.c:1045": {
+      "text": "        assert((size_t)(image - (const uint8_t *)_image) <= (old_sect_size - H5FS_SIZEOF_CHKSUM));",
+      "function": "H5FS__cache_sinfo_deserialize"
+    },
+    "H5FScache.c:1050": {
+      "text": "        assert(old_tot_space == fspace->tot_space);",
+      "function": "H5FS__cache_sinfo_deserialize"
+    },
+    "H5FSsection.c:129": {
+      "text": "    sinfo->nbins            = H5VM_log2_gen(fspace->max_sect_size);",
+      "function": "H5FS__sinfo_new"
+    },
+    "H5FSsection.c:131": {
+      "text": "    sinfo->sect_off_size    = (fspace->max_sect_addr + 7) / 8;",
+      "function": "H5FS__sinfo_new"
+    },
+    "H5FSsection.c:763": {
+      "text": "    bin = H5VM_log2_gen(sect->size);",
+      "function": "H5FS__sect_unlink_size"
+    },
+    "H5FSsection.c:764": {
+      "text": "    assert(bin < sinfo->nbins);",
+      "function": "H5FS__sect_unlink_size"
+    },
+    "H5FSsection.c:933": {
+      "text": "    bin = H5VM_log2_gen(sect->size);",
+      "function": "H5FS__sect_link_size"
+    },
+    "H5FSsection.c:934": {
+      "text": "    assert(bin < sinfo->nbins);",
+      "function": "H5FS__sect_link_size"
+    },
+    "H5FSsection.c:935": {
+      "text": "    if (sinfo->bins[bin].bin_list == NULL) {",
+      "function": "H5FS__sect_link_size"
+    },
+    "H5FSsection.c:969": {
+      "text": "    sinfo->bins[bin].tot_sect_count++;",
+      "function": "H5FS__sect_link_size"
+    },
+    "H5Faccum.c:278": {
+      "text": "    if ((size + accum->size) > accum->alloc_size) {",
+      "function": "H5F__accum_adjust"
+    },
+    "H5Fint.c:884": {
+      "text": "    if (H5_CHECK_ABSOLUTE(file_name) || H5_CHECK_ABS_PATH(file_name)) {",
+      "function": "H5F_prefix_open_file"
+    },
+    "H5Fint.c:919": {
+      "text": "    if (src_file == NULL) {",
+      "function": "H5F_prefix_open_file"
+    },
+    "H5Fint.c:2117": {
+      "text": "        if (H5F__super_read(file, a_plist, true) < 0)",
+      "function": "H5F_open"
+    },
+    "H5Fint.c:2946": {
+      "text": "H5F_addr_encode_len(size_t addr_len, uint8_t **pp /*in,out*/, haddr_t addr)",
+      "function": "H5F_addr_encode_len"
+    },
+    "H5Fint.c:2958": {
+      "text": "            *(*pp)++ = (uint8_t)(addr & 0xff);",
+      "function": "H5F_addr_encode_len"
+    },
+    "H5Fint.c:3008": {
+      "text": "H5F_addr_decode_len(size_t addr_len, const uint8_t **pp /*in,out*/, haddr_t *addr_p /*out*/)",
+      "function": "H5F_addr_decode_len"
+    },
+    "H5Fint.c:3028": {
+      "text": "        c = *(*pp)++;",
+      "function": "H5F_addr_decode_len"
+    },
+    "H5Fio.c:511": {
+      "text": "herr_t",
+      "function": "H5F__evict_cache_entries"
+    },
+    "H5Fio.c:534": {
+      "text": "        UINT32DECODE(chk_p, *s_chksum);",
+      "function": "H5F_get_checksums"
+    },
+    "H5Fprivate.h:172": {
+      "text": "#define H5F_DECODE_LENGTH(f, p, l) H5_DECODE_LENGTH_LEN(p, l, H5F_SIZEOF_SIZE(f))",
+      "function": null
+    },
+    "H5Fsuper.c:574": {
+      "text": "            HGOTO_ERROR(H5E_FILE, H5E_TRUNCATED, FAIL,",
+      "function": "H5F__super_read"
+    },
+    "H5Fsuper.c:670": {
+      "text": "        if ((status = H5O_msg_exists(&ext_loc, H5O_DRVINFO_ID)) < 0)",
+      "function": "H5F__super_read"
+    },
+    "H5Fsuper.c:681": {
+      "text": "                if (H5FD_sb_load(f->shared->lf, drvinfo.name, drvinfo.buf) < 0) {",
+      "function": "H5F__super_read"
+    },
+    "H5Fsuper.c:914": {
+      "text": "            if (H5AC_load_cache_image_on_next_protect(f, mdci_msg.addr, mdci_msg.size, rw) < 0)",
+      "function": "H5F__super_read"
+    },
+    "H5Fsuper_cache.c:89": {
+      "text": "    H5AC__CLASS_SPECULATIVE_LOAD_FLAG,           /* Client class behavior flags */",
+      "function": null
+    },
+    "H5Fsuper_cache.c:187": {
+      "text": "    if (sblock->sizeof_addr != 2 && sblock->sizeof_addr != 4 && sblock->sizeof_addr != 8 &&",
+      "function": "H5F__superblock_prefix_decode"
+    },
+    "H5Fsuper_cache.c:224": {
+      "text": "static herr_t",
+      "function": "H5F__superblock_prefix_decode"
+    },
+    "H5Fsuper_cache.c:254": {
+      "text": "    if (H5_IS_BUFFER_OVERFLOW(image, 4, end))",
+      "function": "H5F__drvrinfo_prefix_decode"
+    },
+    "H5Fsuper_cache.c:268": {
+      "text": "    if (extend_eoa) {",
+      "function": "H5F__drvrinfo_prefix_decode"
+    },
+    "H5Fsuper_cache.c:278": {
+      "text": "        min_eoa = udata->driver_addr + H5F_DRVINFOBLOCK_HDR_SIZE + drvrinfo->len;",
+      "function": "H5F__drvrinfo_prefix_decode"
+    },
+    "H5Fsuper_cache.c:460": {
+      "text": "        udata->f->shared->sizeof_addr = sblock->sizeof_addr; /* Keep a local copy also */",
+      "function": "H5F__cache_superblock_deserialize"
+    },
+    "H5Fsuper_cache.c:546": {
+      "text": "        if (H5_addr_defined(sblock->driver_addr) && sblock->driver_addr >= udata->stored_eof)",
+      "function": "H5F__cache_superblock_deserialize"
+    },
+    "H5Fsuper_cache.c:547": {
+      "text": "            HGOTO_ERROR(H5E_FILE, H5E_BADVALUE, NULL, \"driver info block address exceeds end of file\");",
+      "function": "H5F__cache_superblock_deserialize"
+    },
+    "H5Fsuper_cache.c:908": {
+      "text": "    *actual_len = H5F_DRVINFOBLOCK_HDR_SIZE + drvrinfo.len;",
+      "function": "H5F__cache_drvrinfo_get_final_load_size"
+    },
+    "H5Fsuper_cache.c:951": {
+      "text": "    if (H5FD_sb_load(udata->f->shared->lf, drv_name, image) < 0)",
+      "function": "H5F__cache_drvrinfo_deserialize"
+    },
+    "H5Gbtree2.c:149": {
+      "text": "    if (NULL == (lnk = (H5O_link_t *)H5O_msg_decode(udata->f, NULL, H5O_LINK_ID, obj_len,",
+      "function": "H5G__dense_fh_name_cmp"
+    },
+    "H5Gbtree2.c:293": {
+      "text": "    UINT32DECODE(raw, nrecord->hash);",
+      "function": "H5G__dense_btree2_name_decode"
+    },
+    "H5Gdense.c:43": {
+      "text": "#define H5G_FHEAP_MAN_WIDTH            4",
+      "function": null
+    },
+    "H5Gdense.c:543": {
+      "text": "    if (NULL == (tmp_lnk = (H5O_link_t *)H5O_msg_decode(udata->f, NULL, H5O_LINK_ID, obj_len,",
+      "function": "H5G__dense_lookup_by_idx_fh_cb"
+    },
+    "H5Gdense.c:717": {
+      "text": "    assert(udata->curr_lnk < udata->ltable->nlinks);",
+      "function": "H5G__dense_build_table_cb"
+    },
+    "H5Gdense.c:782": {
+      "text": "        if (H5G__link_sort_table(ltable, idx_type, order) < 0)",
+      "function": "H5G__dense_build_table"
+    },
+    "H5Gent.c:155": {
+      "text": "            UINT32DECODE(*pp, ent->cache.slink.lval_offset);",
+      "function": "H5G_ent_decode"
+    },
+    "H5Gent.c:379": {
+      "text": "    if (NULL == (name = (const char *)H5HL_offset_into(heap, ent->name_off)))",
+      "function": "H5G__ent_to_link"
+    },
+    "H5Gent.c:382": {
+      "text": "    if (NULL == (lnk->name = H5MM_strndup(name, (block_size - ent->name_off))))",
+      "function": "H5G__ent_to_link"
+    },
+    "H5Gent.c:384": {
+      "text": "    if (!*lnk->name)",
+      "function": "H5G__ent_to_link"
+    },
+    "H5Gent.c:385": {
+      "text": "        HGOTO_ERROR(H5E_SYM, H5E_BADVALUE, FAIL, \"invalid link name\");",
+      "function": "H5G__ent_to_link"
+    },
+    "H5Gent.c:391": {
+      "text": "        if (NULL == (s = (const char *)H5HL_offset_into(heap, ent->cache.slink.lval_offset)))",
+      "function": "H5G__ent_to_link"
+    },
+    "H5Gent.c:395": {
+      "text": "        if (NULL == (lnk->u.soft.name = H5MM_strndup(s, (block_size - ent->cache.slink.lval_offset))))",
+      "function": "H5G__ent_to_link"
+    },
+    "H5Glink.c:93": {
+      "text": "    FUNC_LEAVE_NOAPI(strcmp(((const H5O_link_t *)lnk1)->name, ((const H5O_link_t *)lnk2)->name))",
+      "function": "H5G__link_cmp_name_inc"
+    },
+    "H5Glink.c:208": {
+      "text": "                if (H5VL_native_addr_to_token(link_loc->file, H5I_FILE, lnk->u.hard.addr, &info->u.token) < 0)",
+      "function": "H5G_link_to_info"
+    },
+    "H5Glink.c:468": {
+      "text": "            qsort(ltable->lnks, ltable->nlinks, sizeof(H5O_link_t), H5G__link_cmp_name_inc);",
+      "function": "H5G__link_sort_table"
+    },
+    "H5Gobj.c:317": {
+      "text": "        if (linfo->nlinks == HSIZET_MAX) {",
+      "function": "H5G__obj_get_linfo"
+    },
+    "H5Gobj.c:326": {
+      "text": "                if (H5B2_get_nrec(bt2_name, &linfo->nlinks) < 0)",
+      "function": "H5G__obj_get_linfo"
+    },
+    "H5Gobj.c:330": {
+      "text": "                /* Retrieve # of links from object header */",
+      "function": "H5G__obj_get_linfo"
+    },
+    "H5Gstab.c:132": {
+      "text": "    if (H5B_create(f, H5B_SNODE, NULL, &(stab->btree_addr) /*out*/) < 0)",
+      "function": "H5G__stab_create_components"
+    },
+    "H5Gstab.c:427": {
+      "text": "    assert(H5_addr_defined(stab->btree_addr));",
+      "function": "H5G__stab_delete"
+    },
+    "H5Gstab.c:488": {
+      "text": "    if (NULL == (heap = H5HL_protect(oloc->file, stab.heap_addr, H5AC__READ_ONLY_FLAG)))",
+      "function": "H5G__stab_iterate"
+    },
+    "H5Gstab.c:489": {
+      "text": "        HGOTO_ERROR(H5E_SYM, H5E_CANTPROTECT, FAIL, \"unable to protect symbol table heap\");",
+      "function": "H5G__stab_iterate"
+    },
+    "H5Gstab.c:504": {
+      "text": "        if ((ret_value = H5B_iterate(oloc->file, H5B_SNODE, stab.btree_addr, H5G__node_iterate, &udata)) < 0)",
+      "function": "H5G__stab_iterate"
+    },
+    "H5Gstab.c:656": {
+      "text": "    if ((name = (const char *)H5HL_offset_into(udata->heap, name_off)) == NULL)",
+      "function": "H5G__stab_get_name_by_idx_cb"
+    },
+    "H5Gstab.c:660": {
+      "text": "        HGOTO_ERROR(H5E_SYM, H5E_CANTCOPY, FAIL, \"unable to duplicate symbol table link name\");",
+      "function": "H5G__stab_get_name_by_idx_cb"
+    },
+    "H5Gstab.c:811": {
+      "text": "    if (NULL == (heap = H5HL_protect(grp_oloc->file, stab.heap_addr, H5AC__READ_ONLY_FLAG)))",
+      "function": "H5G__stab_lookup"
+    },
+    "H5Gstab.c:832": {
+      "text": "    if (heap && H5HL_unprotect(heap) < 0)",
+      "function": "H5G__stab_lookup"
+    },
+    "H5HF.c:86": {
+      "text": "H5HF__op_read(const void *obj, size_t obj_len, void *op_data)",
+      "function": "H5HF__op_read"
+    },
+    "H5HF.c:335": {
+      "text": "    if (size > hdr->max_man_size) {",
+      "function": "H5HF_insert"
+    },
+    "H5HFcache.c:122": {
+      "text": "    H5AC__CLASS_SPECULATIVE_LOAD_FLAG,     /* Client class behavior flags */",
+      "function": null
+    },
+    "H5HFcache.c:125": {
+      "text": "    H5HF__cache_hdr_verify_chksum,         /* 'verify_chksum' callback */",
+      "function": null
+    },
+    "H5HFcache.c:167": {
+      "text": "    H5HF__cache_dblock_free_icr,              /* 'free_icr' callback */",
+      "function": null
+    },
+    "H5HFcache.c:214": {
+      "text": "    UINT16DECODE(image, hdr->id_len);     /* Heap ID length */",
+      "function": "H5HF__hdr_prefix_decode"
+    },
+    "H5HFcache.c:236": {
+      "text": "H5HF__dtable_decode(H5F_t *f, const uint8_t **pp, H5HF_dtable_t *dtable)",
+      "function": "H5HF__dtable_decode"
+    },
+    "H5HFcache.c:246": {
+      "text": "    UINT16DECODE(*pp, dtable->cparam.width);",
+      "function": "H5HF__dtable_decode"
+    },
+    "H5HFcache.c:527": {
+      "text": "        if (NULL == (pline = (H5O_pline_t *)H5O_msg_decode(hdr->f, NULL, H5O_PLINE_ID, len, image)))",
+      "function": "H5HF__cache_hdr_deserialize"
+    },
+    "H5HFcache.c:904": {
+      "text": "H5HF__cache_iblock_deserialize(const void *_image, size_t H5_ATTR_NDEBUG_UNUSED len, void *_udata,",
+      "function": "H5HF__cache_iblock_deserialize"
+    },
+    "H5HFcache.c:1518": {
+      "text": " * Function:    H5HF__cache_dblock_verify_chksum",
+      "function": "H5HF__cache_dblock_get_initial_load_size"
+    },
+    "H5HFcache.c:1596": {
+      "text": "    chk_size = (size_t)(H5HF_MAN_ABS_DIRECT_OVERHEAD(hdr) - H5HF_SIZEOF_CHKSUM);",
+      "function": "H5HF__cache_dblock_verify_chksum"
+    },
+    "H5HFcache.c:1600": {
+      "text": "    UINT32DECODE(chk_p, stored_chksum);",
+      "function": "H5HF__cache_dblock_verify_chksum"
+    },
+    "H5HFcache.c:1705": {
+      "text": "            udata->dblk = NULL;",
+      "function": "H5HF__cache_dblock_deserialize"
+    },
+    "H5HFcache.c:1792": {
+      "text": "    UINT64DECODE_VAR(image, dblock->block_off, hdr->heap_off_size);",
+      "function": "H5HF__cache_dblock_deserialize"
+    },
+    "H5HFcache.c:1805": {
+      "text": "    assert((size_t)(image - dblock->blk) == (size_t)H5HF_MAN_ABS_DIRECT_OVERHEAD(hdr));",
+      "function": "H5HF__cache_dblock_deserialize"
+    },
+    "H5HFcache.c:2068": {
+      "text": "    assert((size_t)(image - dblock->blk) == (size_t)H5HF_MAN_ABS_DIRECT_OVERHEAD(hdr));",
+      "function": "H5HF__cache_dblock_pre_serialize"
+    },
+    "H5HFdblock.c:421": {
+      "text": "    H5HF_dblock_cache_ud_t udata;            /* parent and other info for deserializing direct block */",
+      "function": "H5HF__man_dblock_protect"
+    },
+    "H5HFdtable.c:99": {
+      "text": "    if (NULL == (dtable->row_block_size = (hsize_t *)H5MM_malloc(dtable->max_root_rows * sizeof(hsize_t))))",
+      "function": "H5HF__dtable_init"
+    },
+    "H5HFdtable.c:135": {
+      "text": "H5HF__dtable_lookup(const H5HF_dtable_t *dtable, hsize_t off, unsigned *row, unsigned *col)",
+      "function": "H5HF__dtable_lookup"
+    },
+    "H5HFdtable.c:156": {
+      "text": "        H5_CHECKED_ASSIGN(*col, unsigned, ((off - off_mask) / dtable->row_block_size[*row]), hsize_t);",
+      "function": "H5HF__dtable_lookup"
+    },
+    "H5HFdtable.c:278": {
+      "text": "    assert(num_entries > 0);",
+      "function": "H5HF__dtable_span_size"
+    },
+    "H5HFdtable.c:303": {
+      "text": "            acc_span_size += dtable->row_block_size[start_row] * dtable->cparam.width;",
+      "function": "H5HF__dtable_span_size"
+    },
+    "H5HFdtable.c:312": {
+      "text": "        acc_span_size = dtable->row_block_size[start_row] * ((end_col - start_col) + 1);",
+      "function": "H5HF__dtable_span_size"
+    },
+    "H5HFhdr.c:133": {
+      "text": "static herr_t",
+      "function": "H5HF__hdr_alloc"
+    },
+    "H5HFhdr.c:157": {
+      "text": "    while (acc_heap_size < iblock_size) {",
+      "function": "H5HF__hdr_compute_free_space"
+    },
+    "H5HFhdr.c:160": {
+      "text": "        if (hdr->man_dtable.row_max_dblock_free[curr_row] > max_dblock_free)",
+      "function": "H5HF__hdr_compute_free_space"
+    },
+    "H5HFhdr.c:178": {
+      "text": " *",
+      "function": "H5HF__hdr_compute_free_space"
+    },
+    "H5HFhdr.c:314": {
+      "text": "#ifndef NDEBUG",
+      "function": "H5HF__hdr_create"
+    },
+    "H5HFhuge.c:291": {
+      "text": "    assert(obj_size > hdr->max_man_size);",
+      "function": "H5HF__huge_insert"
+    },
+    "H5HFhuge.c:521": {
+      "text": "            *obj_len_p = (size_t)found_rec.obj_size;",
+      "function": "H5HF__huge_get_obj_len"
+    },
+    "H5HFhuge.c:644": {
+      "text": "H5HF__huge_op_real(H5HF_hdr_t *hdr, const uint8_t *id, bool is_read, H5HF_operator_t op, void *op_data)",
+      "function": "H5HF__huge_op_real"
+    },
+    "H5HFhuge.c:750": {
+      "text": "        read_size = nbytes = obj_size;",
+      "function": "H5HF__huge_op_real"
+    },
+    "H5HFhuge.c:753": {
+      "text": "            HGOTO_ERROR(H5E_HEAP, H5E_CANTFILTER, FAIL, \"input filter failed\");",
+      "function": "H5HF__huge_op_real"
+    },
+    "H5HFhuge.c:754": {
+      "text": "        obj_size = nbytes;",
+      "function": "H5HF__huge_op_real"
+    },
+    "H5HFiblock.c:1754": {
+      "text": "    if (H5HF__dtable_lookup(&hdr->man_dtable, block_off, &row, &col) < 0)",
+      "function": "H5HF__man_iblock_parent_info"
+    },
+    "H5HFiter.c:105": {
+      "text": "herr_t",
+      "function": "H5HF__man_iter_init"
+    },
+    "H5HFiter.c:159": {
+      "text": "        curr_offset = offset - hdr->man_dtable.row_block_off[row];",
+      "function": "H5HF__man_iter_start_offset"
+    },
+    "H5HFman.c:324": {
+      "text": "    if (obj_off > hdr->man_size)",
+      "function": "H5HF__man_op_real"
+    },
+    "H5HFman.c:350": {
+      "text": "        if (H5HF__man_dblock_locate(hdr, obj_off, &iblock, &entry, &did_protect, H5AC__READ_ONLY_FLAG) < 0)",
+      "function": "H5HF__man_op_real"
+    },
+    "H5HFman.c:387": {
+      "text": "    assert((obj_off - dblock->block_off) < (hsize_t)dblock_size);",
+      "function": "H5HF__man_op_real"
+    },
+    "H5HFman.c:395": {
+      "text": "    if ((blk_off + obj_len) > dblock_size)",
+      "function": "H5HF__man_op_real"
+    },
+    "H5HFman.c:575": {
+      "text": "        if (H5HF__man_dblock_locate(hdr, obj_off, &iblock, &dblock_entry, &did_protect, H5AC__NO_FLAGS_SET) <",
+      "function": "H5HF__man_remove"
+    },
+    "H5HFsection.c:37": {
+      "text": "#define H5HF_SECT_INDIRECT_SERIAL_SIZE(h)                                                                    \\",
+      "function": null
+    },
+    "H5HFsection.c:1604": {
+      "text": "    /* Forward to indirect routine to deserialize underlying section */",
+      "function": "H5HF__sect_row_deserialize"
+    },
+    "H5HFsection.c:2116": {
+      "text": "    sect->u.indirect.span_size = H5HF__dtable_span_size(&hdr->man_dtable, row, col, nentries);",
+      "function": "H5HF__sect_indirect_new"
+    },
+    "H5HFsection.c:3722": {
+      "text": "    UINT64DECODE_VAR(buf, iblock_off, hdr->heap_off_size);",
+      "function": "H5HF__sect_indirect_deserialize"
+    },
+    "H5HFsection.c:3730": {
+      "text": "    /* Indirect section's # of entries */",
+      "function": "H5HF__sect_indirect_deserialize"
+    },
+    "H5HFsection.c:3731": {
+      "text": "    UINT16DECODE(buf, nentries);",
+      "function": "H5HF__sect_indirect_deserialize"
+    },
+    "H5HFspace.c:84": {
+      "text": "    const H5FS_section_class_t *classes[] = {/* Free space section classes implemented for fractal heap */",
+      "function": "H5HF__space_start"
+    },
+    "H5HFspace.c:112": {
+      "text": "            fs_create.max_sect_size  = hdr->man_dtable.cparam.max_direct_size;",
+      "function": "H5HF__space_start"
+    },
+    "H5HFtiny.c:179": {
+      "text": "H5HF__tiny_get_obj_len(H5HF_hdr_t *hdr, const uint8_t *id, size_t *obj_len_p)",
+      "function": "H5HF__tiny_get_obj_len"
+    },
+    "H5HFtiny.c:199": {
+      "text": "        enc_obj_size = (size_t) * (id + 1) | ((size_t)(*id & H5HF_TINY_MASK_EXT_1) << 8);",
+      "function": "H5HF__tiny_get_obj_len"
+    },
+    "H5HFtiny.c:247": {
+      "text": "    if (op(id, enc_obj_size, op_data) < 0)",
+      "function": "H5HF__tiny_op_real"
+    },
+    "H5HG.c:548": {
+      "text": "H5HG_read(H5F_t *f, H5HG_t *hobj, void *object /*out*/, size_t *buf_size)",
+      "function": "H5HG_read"
+    },
+    "H5HG.c:570": {
+      "text": "    if (hobj->idx >= heap->nused)",
+      "function": "H5HG_read"
+    },
+    "H5HGcache.c:75": {
+      "text": "    H5AC__CLASS_SPECULATIVE_LOAD_FLAG,      /* Client class behavior flags */",
+      "function": null
+    },
+    "H5HGcache.c:265": {
+      "text": "    /* Calloc the obj array because the file format spec makes no guarantee",
+      "function": "H5HG__cache_heap_deserialize"
+    },
+    "H5HGcache.c:272": {
+      "text": "    while (p < (heap->chunk + heap->size)) {",
+      "function": "H5HG__cache_heap_deserialize"
+    },
+    "H5HGcache.c:280": {
+      "text": "                HGOTO_ERROR(H5E_HEAP, H5E_BADVALUE, NULL, \"object 0 should not be set\");",
+      "function": "H5HG__cache_heap_deserialize"
+    },
+    "H5HGcache.c:337": {
+      "text": "            H5F_DECODE_LENGTH(f, p, heap->obj[idx].size);",
+      "function": "H5HG__cache_heap_deserialize"
+    },
+    "H5HGcache.c:353": {
+      "text": "                need = H5HG_SIZEOF_OBJHDR(f) + H5HG_ALIGN(heap->obj[idx].size);",
+      "function": "H5HG__cache_heap_deserialize"
+    },
+    "H5HGcache.c:358": {
+      "text": "                need = heap->obj[idx].size;",
+      "function": "H5HG__cache_heap_deserialize"
+    },
+    "H5HGcache.c:363": {
+      "text": "            if (H5_IS_BUFFER_OVERFLOW(begin, need, p_end))",
+      "function": "H5HG__cache_heap_deserialize"
+    },
+    "H5HGcache.c:373": {
+      "text": "        HGOTO_ERROR(H5E_HEAP, H5E_BADVALUE, NULL, \"decoded global heap is not aligned\");",
+      "function": "H5HG__cache_heap_deserialize"
+    },
+    "H5HGpkg.h:69": {
+      "text": "#define H5HG_ALIGN(X)     (H5HG_ALIGNMENT * (((X) + H5HG_ALIGNMENT - 1) / H5HG_ALIGNMENT))",
+      "function": null
+    },
+    "H5HGpkg.h:99": {
+      "text": "#define H5HG_NOBJS(f, z) ((((z)-H5HG_SIZEOF_HDR(f)) / H5HG_SIZEOF_OBJHDR(f) + 2))",
+      "function": null
+    },
+    "H5HL.c:331": {
+      "text": "    if (heap->prots == 0) {",
+      "function": "H5HL_protect"
+    },
+    "H5HL.c:335": {
+      "text": "        if (heap->single_cache_obj)",
+      "function": "H5HL_protect"
+    },
+    "H5HL.c:341": {
+      "text": "                (dblk = (H5HL_dblk_t *)H5AC_protect(f, H5AC_LHEAP_DBLK, heap->dblk_addr, heap, flags)))",
+      "function": "H5HL_protect"
+    },
+    "H5HL.c:391": {
+      "text": "    if (offset >= heap->dblk_size)",
+      "function": "H5HL_offset_into"
+    },
+    "H5HL.c:427": {
+      "text": "        if (heap->single_cache_obj) {",
+      "function": "H5HL_unprotect"
+    },
+    "H5HL.c:434": {
+      "text": "            if (NULL == heap->dblk)",
+      "function": "H5HL_unprotect"
+    },
+    "H5HL.c:690": {
+      "text": "            HGOTO_ERROR(H5E_HEAP, H5E_CANTALLOC, FAIL, \"memory allocation failed\");",
+      "function": "H5HL_insert"
+    },
+    "H5HL.c:698": {
+      "text": "    H5MM_memcpy(heap->dblk_image + offset, buf, buf_size);",
+      "function": "H5HL_insert"
+    },
+    "H5HLcache.c:100": {
+      "text": "    H5AC__CLASS_SPECULATIVE_LOAD_FLAG,        /* Client class behavior flags */",
+      "function": null
+    },
+    "H5HLcache.c:189": {
+      "text": "    if (heap->free_block != H5HL_FREE_NULL && heap->free_block >= heap->dblk_size)",
+      "function": "H5HL__hdr_deserialize"
+    },
+    "H5HLcache.c:237": {
+      "text": "        if (free_block > UINT64_MAX - (2 * heap->sizeof_size))",
+      "function": "H5HL__fl_deserialize"
+    },
+    "H5HLcache.c:240": {
+      "text": "        if ((free_block + (2 * heap->sizeof_size)) > heap->dblk_size)",
+      "function": "H5HL__fl_deserialize"
+    },
+    "H5HLcache.c:241": {
+      "text": "            HGOTO_ERROR(H5E_HEAP, H5E_BADRANGE, FAIL, \"bad heap free list\");",
+      "function": "H5HL__fl_deserialize"
+    },
+    "H5HLcache.c:253": {
+      "text": "        if (0 == free_block)",
+      "function": "H5HL__fl_deserialize"
+    },
+    "H5HLcache.c:258": {
+      "text": "        if ((fl->offset + fl->size) > heap->dblk_size)",
+      "function": "H5HL__fl_deserialize"
+    },
+    "H5HLcache.c:265": {
+      "text": "            heap->freelist = fl;",
+      "function": "H5HL__fl_deserialize"
+    },
+    "H5HLcache.c:308": {
+      "text": "            H5_ENCODE_LENGTH_LEN(image, H5HL_FREE_NULL, heap->sizeof_size);",
+      "function": "H5HL__fl_serialize"
+    },
+    "H5HLcache.c:310": {
+      "text": "        H5_ENCODE_LENGTH_LEN(image, fl->size, heap->sizeof_size);",
+      "function": "H5HL__fl_serialize"
+    },
+    "H5HLcache.c:436": {
+      "text": "    if (heap->dblk_size) {",
+      "function": "H5HL__cache_prefix_deserialize"
+    },
+    "H5HLcache.c:438": {
+      "text": "        if (H5_addr_eq((heap->prfx_addr + heap->prfx_size), heap->dblk_addr)) {",
+      "function": "H5HL__cache_prefix_deserialize"
+    },
+    "H5HLcache.c:713": {
+      "text": "    if (NULL == heap->dblk_image) {",
+      "function": "H5HL__cache_datablock_deserialize"
+    },
+    "H5HLcache.c:715": {
+      "text": "        if (NULL == (heap->dblk_image = H5FL_BLK_MALLOC(lheap_chunk, heap->dblk_size)))",
+      "function": "H5HL__cache_datablock_deserialize"
+    },
+    "H5HLcache.c:730": {
+      "text": "    /* Release the [possibly partially initialized] local heap on errors */",
+      "function": "H5HL__cache_datablock_deserialize"
+    },
+    "H5HLdbg.c:82": {
+      "text": "        if ((freelist->offset + freelist->size) > h->dblk_size)",
+      "function": "H5HL_debug"
+    },
+    "H5HLdblk.c:98": {
+      "text": "    dblk->heap = heap;",
+      "function": "H5HL__dblk_new"
+    },
+    "H5HLpkg.h:54": {
+      "text": "#define H5HL_FREE_NULL 1",
+      "function": null
+    },
+    "H5HLpkg.h:89": {
+      "text": "    size_t       dblk_size;  /* size of heap data block on disk and in mem           */",
+      "function": null
+    },
+    "H5L.c:1930": {
+      "text": "H5Lunpack_elink_val(const void *_ext_linkval, size_t link_size, unsigned *flags, const char **filename,",
+      "function": "H5Lunpack_elink_val"
+    },
+    "H5Lexternal.c:131": {
+      "text": "    if (udata_size <= 2)",
+      "function": "H5L__extern_traverse"
+    },
+    "H5Lexternal.c:145": {
+      "text": "    fname_len = strlen(file_name);",
+      "function": "H5L__extern_traverse"
+    },
+    "H5Lexternal.c:288": {
+      "text": "H5L__extern_query(const char H5_ATTR_UNUSED *link_name, const void *_udata, size_t udata_size,",
+      "function": "H5L__extern_query"
+    },
+    "H5MF.c:345": {
+      "text": "    const H5FS_section_class_t *classes[] = {/* Free space section classes implemented for file */",
+      "function": "H5MF__open_fstype"
+    },
+    "H5MF.c:450": {
+      "text": "    fs_create.max_sect_size  = f->shared->maxaddr;",
+      "function": "H5MF__create_fstype"
+    },
+    "H5MFaggr.c:214": {
+      "text": "            if ((size + aggr_frag_size) > aggr->size) {",
+      "function": "H5MF__aggr_alloc"
+    },
+    "H5MM.c:176": {
+      "text": "    if (NULL == (ret_value = HDstrndup(s, n)))",
+      "function": "H5MM_strndup"
+    },
+    "H5MM.c:201": {
+      "text": "    free(mem);",
+      "function": "H5MM_xfree"
+    },
+    "H5MMprivate.h:38": {
+      "text": "#define H5MM_free(Z)   free(Z)",
+      "function": null
+    },
+    "H5Oalloc.c:903": {
+      "text": "    if (NULL == (oh->chunk[chunkno].image = p = H5FL_BLK_CALLOC(chunk_image, size)))",
+      "function": "H5O__alloc_chunk"
+    },
+    "H5Oattr.c:147": {
+      "text": "    attr->shared->version = *p++;",
+      "function": "H5O__attr_decode"
+    },
+    "H5Oattr.c:266": {
+      "text": "    if (0 == (dt_size = H5T_get_size(attr->shared->dt)))",
+      "function": "H5O__attr_decode"
+    },
+    "H5Oattr.c:273": {
+      "text": "    H5_CHECKED_ASSIGN(attr->shared->data_size, size_t, ds_size * (hsize_t)dt_size, hsize_t);",
+      "function": "H5O__attr_decode"
+    },
+    "H5Oattr.c:286": {
+      "text": "        if (NULL == (attr->shared->data = H5FL_BLK_MALLOC(attr_buf, attr->shared->data_size)))",
+      "function": "H5O__attr_decode"
+    },
+    "H5Ocache.c:92": {
+      "text": "    H5AC__CLASS_SPECULATIVE_LOAD_FLAG, /* Client class behavior flags */",
+      "function": null
+    },
+    "H5Ocache.c:110": {
+      "text": "    H5AC__CLASS_NO_FLAGS_SET,             /* Client class behavior flags */",
+      "function": null
+    },
+    "H5Ocache.c:282": {
+      "text": "        HGOTO_ERROR(H5E_OHDR, H5E_CANTDECODE, NULL, \"can't deserialize object header prefix\");",
+      "function": "H5O__cache_deserialize"
+    },
+    "H5Ocache.c:305": {
+      "text": "    if (oh->version == H5O_VERSION_1 && udata->v1_pfx_nmesgs < oh->nmesgs)",
+      "function": "H5O__cache_deserialize"
+    },
+    "H5Ocache.c:309": {
+      "text": "    udata->made_attempt = true;",
+      "function": "H5O__cache_deserialize"
+    },
+    "H5Ocache.c:1027": {
+      "text": "            HGOTO_ERROR(H5E_OHDR, H5E_VERSION, FAIL, \"bad object header version number\");",
+      "function": "H5O__prefix_deserialize"
+    },
+    "H5Ocache.c:1220": {
+      "text": "    if (NULL == (oh->chunk[chunkno].image = H5FL_BLK_MALLOC(chunk_image, oh->chunk[chunkno].size)))",
+      "function": "H5O__chunk_deserialize"
+    },
+    "H5Ocache.c:1280": {
+      "text": "        if (mesg_size != H5O_ALIGN_OH(oh, mesg_size))",
+      "function": "H5O__chunk_deserialize"
+    },
+    "H5Ocache.c:1319": {
+      "text": "        if (H5_IS_BUFFER_OVERFLOW(chunk_image, mesg_size, p_end))",
+      "function": "H5O__chunk_deserialize"
+    },
+    "H5Ocache_image.c:117": {
+      "text": "    H5F_DECODE_LENGTH(f, p, mesg->size);",
+      "function": "H5O__mdci_decode"
+    },
+    "H5Ocache_image.c:119": {
+      "text": "    if (H5_addr_defined(mesg->addr) && mesg->size) {",
+      "function": "H5O__mdci_decode"
+    },
+    "H5Ocont.c:105": {
+      "text": "    H5F_DECODE_LENGTH(f, p, cont->size);",
+      "function": "H5O__cont_decode"
+    },
+    "H5Ocopy.c:569": {
+      "text": "    if (NULL == (oh_dst->chunk[0].image = H5FL_BLK_CALLOC(chunk_image, (size_t)dst_oh_size)))",
+      "function": "H5O__copy_header_real"
+    },
+    "H5Ocopy_ref.c:193": {
+      "text": "            if (H5VL_native_addr_to_token(dst_oloc->file, H5I_FILE, dst_oloc->addr, &tmp_token) < 0)",
+      "function": "H5O__copy_expand_ref_object1"
+    },
+    "H5Odbg.c:480": {
+      "text": "            H5O_LOAD_NATIVE(f, H5O_DECODEIO_NOCHANGE, oh, &oh->mesg[i], FAIL)",
+      "function": "H5O__debug_real"
+    },
+    "H5Odeprec.c:382": {
+      "text": "        if (H5VL_native_addr_to_token(vol_obj_data, vol_obj_type, addr, &obj_token) < 0)",
+      "function": "H5Oopen_by_addr"
+    },
+    "H5Odrvinfo.c:193": {
+      "text": "    if (NULL == (dest->buf = (uint8_t *)H5MM_malloc(mesg->len))) {",
+      "function": "H5O__drvinfo_copy"
+    },
+    "H5Odtype.c:160": {
+      "text": "    UINT32DECODE(*pp, dt->shared->size);",
+      "function": "H5O__dtype_decode_helper"
+    },
+    "H5Odtype.c:224": {
+      "text": "                HGOTO_ERROR(H5E_DATATYPE, H5E_BADRANGE, FAIL, \"sign bit position out of bounds\");",
+      "function": "H5O__dtype_decode_helper"
+    },
+    "H5Odtype.c:507": {
+      "text": "                if (temp_type->shared->size == 0)",
+      "function": "H5O__dtype_decode_helper"
+    },
+    "H5Odtype.c:509": {
+      "text": "                if ((dt->shared->u.compnd.memb[dt->shared->u.compnd.nmembs].offset +",
+      "function": "H5O__dtype_decode_helper"
+    },
+    "H5Odtype.c:542": {
+      "text": "                        if ((array_dt = H5T__array_create(temp_type, ndims, dim)) == NULL) {",
+      "function": "H5O__dtype_decode_helper"
+    },
+    "H5Odtype.c:594": {
+      "text": "                /* Check if this field overlaps with a prior field",
+      "function": "H5O__dtype_decode_helper"
+    },
+    "H5Odtype.c:637": {
+      "text": "        case H5T_REFERENCE:",
+      "function": "H5O__dtype_decode_helper"
+    },
+    "H5Odtype.c:651": {
+      "text": "                HGOTO_ERROR(H5E_DATATYPE, H5E_CANTDECODE, FAIL, \"invalid reference type\");",
+      "function": "H5O__dtype_decode_helper"
+    },
+    "H5Odtype.c:685": {
+      "text": "            if (dt->shared->parent->shared->size != dt->shared->size)",
+      "function": "H5O__dtype_decode_helper"
+    },
+    "H5Odtype.c:812": {
+      "text": "                HGOTO_ERROR(H5E_OHDR, H5E_OVERFLOW, FAIL, \"ran off end of input buffer while decoding\");",
+      "function": "H5O__dtype_decode_helper"
+    },
+    "H5Odtype.c:815": {
+      "text": "                if (dt->shared->u.array.dim[u] != 0 &&",
+      "function": "H5O__dtype_decode_helper"
+    },
+    "H5Odtype.c:865": {
+      "text": "        case H5T_COMPLEX: {",
+      "function": "H5O__dtype_decode_helper"
+    },
+    "H5Odtype.c:895": {
+      "text": "            if (H5O__dtype_decode_helper(ioflags, pp, dt->shared->parent, skip, p_end) < 0)",
+      "function": "H5O__dtype_decode_helper"
+    },
+    "H5Ofill.c:189": {
+      "text": "H5O__fill_new_decode(H5F_t H5_ATTR_UNUSED *f, H5O_t H5_ATTR_UNUSED *open_oh,",
+      "function": "H5O__fill_new_decode"
+    },
+    "H5Ofill.c:213": {
+      "text": "    if (fill->version < H5O_FILL_VERSION_3) {",
+      "function": "H5O__fill_new_decode"
+    },
+    "H5Ofill.c:328": {
+      "text": "H5O__fill_old_decode(H5F_t *f, H5O_t *open_oh, unsigned H5_ATTR_UNUSED mesg_flags,",
+      "function": "H5O__fill_old_decode"
+    },
+    "H5Oint.c:500": {
+      "text": "    oh->chunk[0].image = H5FL_BLK_CALLOC(chunk_image, oh_size);",
+      "function": "H5O_apply_ohdr"
+    },
+    "H5Oint.c:1049": {
+      "text": "            if (NULL == (chk_proxy = (H5O_chunk_proxy_t *)H5AC_protect(loc->file, H5AC_OHDR_CHK,",
+      "function": "H5O_protect"
+    },
+    "H5Oint.c:1084": {
+      "text": "    if (udata.made_attempt) {",
+      "function": "H5O_protect"
+    },
+    "H5Oint.c:2130": {
+      "text": "        if (H5VL_native_addr_to_token(loc->file, H5I_FILE, loc->addr, &oinfo->token) < 0)",
+      "function": "H5O_get_info"
+    },
+    "H5Olayout.c:115": {
+      "text": "        if (!ndims || ndims > H5O_LAYOUT_NDIMS)",
+      "function": "H5O__layout_decode"
+    },
+    "H5Olayout.c:123": {
+      "text": "        if (H5D_CONTIGUOUS != mesg->type && H5D_CHUNKED != mesg->type && H5D_COMPACT != mesg->type)",
+      "function": "H5O__layout_decode"
+    },
+    "H5Olayout.c:124": {
+      "text": "            HGOTO_ERROR(H5E_OHDR, H5E_BADVALUE, NULL, \"bad layout type for layout message\");",
+      "function": "H5O__layout_decode"
+    },
+    "H5Olayout.c:262": {
+      "text": "                H5F_DECODE_LENGTH(f, p, mesg->storage.u.contig.size);",
+      "function": "H5O__layout_decode"
+    },
+    "H5Olayout.c:279": {
+      "text": "                    if (mesg->u.chunk.ndims > H5O_LAYOUT_NDIMS)",
+      "function": "H5O__layout_decode"
+    },
+    "H5Olayout.c:282": {
+      "text": "                        HGOTO_ERROR(H5E_OHDR, H5E_BADVALUE, NULL, \"bad dimensions for chunked storage\");",
+      "function": "H5O__layout_decode"
+    },
+    "H5Olayout.c:336": {
+      "text": "                    mesg->u.chunk.ndims = *p++;",
+      "function": "H5O__layout_decode"
+    },
+    "H5Olayout.c:338": {
+      "text": "                    if (mesg->u.chunk.ndims > H5O_LAYOUT_NDIMS)",
+      "function": "H5O__layout_decode"
+    },
+    "H5Olayout.c:347": {
+      "text": "                    if (mesg->u.chunk.enc_bytes_per_dim == 0 || mesg->u.chunk.enc_bytes_per_dim > 8)",
+      "function": "H5O__layout_decode"
+    },
+    "H5Olayout.c:401": {
+      "text": "                                H5F_DECODE_LENGTH(f, p, nbytes);",
+      "function": "H5O__layout_decode"
+    },
+    "H5Olayout.c:530": {
+      "text": "                if (mesg->version < H5O_LAYOUT_VERSION_4)",
+      "function": "H5O__layout_decode"
+    },
+    "H5Olayout.c:531": {
+      "text": "                    HGOTO_ERROR(H5E_OHDR, H5E_VERSION, NULL, \"invalid layout version with virtual layout\");",
+      "function": "H5O__layout_decode"
+    },
+    "H5Olayout.c:536": {
+      "text": "                H5F_addr_decode(f, &p, &(mesg->storage.u.virt.serial_list_hobjid.addr));",
+      "function": "H5O__layout_decode"
+    },
+    "H5Olayout.c:565": {
+      "text": "    /* For a chunked layout, the stored dimensionality includes an extra",
+      "function": "H5O__layout_decode"
+    },
+    "H5Olayout.c:592": {
+      "text": "                            \"dimensionality of chunks doesn't match the dataspace\");",
+      "function": "H5O__layout_decode"
+    },
+    "H5Olink.c:51": {
+      "text": "const H5O_msg_class_t H5O_MSG_LINK[1] = {{",
+      "function": null
+    },
+    "H5Olink.c:121": {
+      "text": "    if (*p++ != H5O_LINK_VERSION)",
+      "function": "H5O__link_decode"
+    },
+    "H5Olink.c:200": {
+      "text": "    if (len == 0)",
+      "function": "H5O__link_decode"
+    },
+    "H5Olink.c:208": {
+      "text": "    H5MM_memcpy(lnk->name, p, len);",
+      "function": "H5O__link_decode"
+    },
+    "H5Olink.c:209": {
+      "text": "    lnk->name[len] = '\\0';",
+      "function": "H5O__link_decode"
+    },
+    "H5Olink.c:250": {
+      "text": "            if (lnk->type == H5L_TYPE_EXTERNAL && len < 3)",
+      "function": "H5O__link_decode"
+    },
+    "H5Olink.c:256": {
+      "text": "                if (NULL == (lnk->u.ud.udata = H5MM_malloc((size_t)len)))",
+      "function": "H5O__link_decode"
+    },
+    "H5Olink.c:373": {
+      "text": "            len = (uint16_t)strlen(lnk->u.soft.name);",
+      "function": "H5O__link_encode"
+    },
+    "H5Olink.c:374": {
+      "text": "            assert(len > 0);",
+      "function": "H5O__link_encode"
+    },
+    "H5Olink.c:777": {
+      "text": "H5O__link_debug(H5F_t H5_ATTR_UNUSED *f, const void *_mesg, FILE *stream, int indent, int fwidth)",
+      "function": "H5O__link_debug"
+    },
+    "H5Olink.c:824": {
+      "text": "                    const char *objname =",
+      "function": "H5O__link_debug"
+    },
+    "H5Olink.c:829": {
+      "text": "                    fprintf(stream, \"%*s%-*s %s\\n\", indent, \"\", fwidth, \"External Object Name:\", objname);",
+      "function": "H5O__link_debug"
+    },
+    "H5Omessage.c:489": {
+      "text": "    H5O_LOAD_NATIVE(f, 0, oh, &(oh->mesg[idx]), NULL)",
+      "function": "H5O_msg_read_oh"
+    },
+    "H5Omessage.c:790": {
+      "text": "    if (NULL == (oh = H5O_protect(loc, H5AC__READ_ONLY_FLAG, false)))",
+      "function": "H5O_msg_exists"
+    },
+    "H5Omessage.c:1091": {
+      "text": "    assert(type_id < NELMTS(H5O_msg_class_g));",
+      "function": "H5O_msg_iterate"
+    },
+    "H5Oname.c:89": {
+      "text": "    if (NULL == (mesg->s = (char *)H5MM_strndup((const char *)p, p_size - 1)))",
+      "function": "H5O__name_decode"
+    },
+    "H5Opline.c:232": {
+      "text": "                UINT32DECODE(p, filter->cd_values[j]);",
+      "function": "H5O__pline_decode"
+    },
+    "H5Osdspace.c:214": {
+      "text": "        for (i = 0, sdim->nelem = 1; i < sdim->rank; i++)",
+      "function": "H5O__sdspace_decode"
+    },
+    "H5Osdspace.c:215": {
+      "text": "            sdim->nelem *= sdim->size[i];",
+      "function": "H5O__sdspace_decode"
+    },
+    "H5Oshared.c:160": {
+      "text": "        if (open_oh && oloc.addr == H5O_OH_GET_ADDR(open_oh)) {",
+      "function": "H5O__shared_read"
+    },
+    "H5Oshared.c:165": {
+      "text": "            if (NULL == (ret_value = H5O_msg_read_oh(f, open_oh, type->id, NULL)))",
+      "function": "H5O__shared_read"
+    },
+    "H5Oshared.c:372": {
+      "text": "    if (NULL == (ret_value = H5O__shared_read(f, open_oh, ioflags, &sh_mesg, type)))",
+      "function": "H5O__shared_decode"
+    },
+    "H5Oshmesg.c:87": {
+      "text": "    mesg->version = *p++;",
+      "function": "H5O__shmesg_decode"
+    },
+    "H5Oshmesg.c:95": {
+      "text": "    mesg->nindexes = *p++;",
+      "function": "H5O__shmesg_decode"
+    },
+    "H5PB.c:1560": {
+      "text": "        if ((page_entry->addr + page_size) > eoa)",
+      "function": "H5PB__write_entry"
+    },
+    "H5Pfcpl.c:401": {
+      "text": "    if (sizeof_size) {",
+      "function": "H5Pset_sizes"
+    },
+    "H5Pfcpl.c:752": {
+      "text": "    if (nindexes > H5O_SHMESG_MAX_NINDEXES)",
+      "function": "H5Pset_shared_mesg_nindexes"
+    },
+    "H5R.c:624": {
+      "text": "H5R__open_region_api_common(H5R_ref_t *ref_ptr, hid_t rapl_id, hid_t oapl_id, void **token_ptr,",
+      "function": "H5R__open_region_api_common"
+    },
+    "H5R.c:687": {
+      "text": "    if (H5VL_dataset_get(opened_obj, &vol_cb_args, H5P_DATASET_XFER_DEFAULT, H5_REQUEST_NULL) < 0)",
+      "function": "H5R__open_region_api_common"
+    },
+    "H5R.c:729": {
+      "text": "    if ((ret_value = H5R__open_region_api_common(ref_ptr, rapl_id, oapl_id, NULL, NULL)) < 0)",
+      "function": "H5Ropen_region"
+    },
+    "H5Rint.c:72": {
+      "text": "        buf_size -= __nbytes;                                                                                \\",
+      "function": null
+    },
+    "H5Rint.c:956": {
+      "text": "H5R__decode(const unsigned char *buf, size_t *nbytes, H5R_ref_priv_t *ref)",
+      "function": "H5R__decode"
+    },
+    "H5Rint.c:1121": {
+      "text": "    if (*nbytes < sizeof(uint8_t))",
+      "function": "H5R__decode_obj_token"
+    },
+    "H5Rint.c:1133": {
+      "text": "    H5MM_memcpy(obj_token, p, *token_size);",
+      "function": "H5R__decode_obj_token"
+    },
+    "H5Rint.c:1323": {
+      "text": "    UINT16DECODE(p, string_len);",
+      "function": "H5R__decode_string"
+    },
+    "H5Rint.c:1331": {
+      "text": "    H5MM_memcpy(string, p, string_len);",
+      "function": "H5R__decode_string"
+    },
+    "H5S.c:1285": {
+      "text": "        for (u = 0, nelem = 1; dims && (u < space->extent.rank); u++) {",
+      "function": "H5S_set_extent_simple"
+    },
+    "H5S.c:1287": {
+      "text": "            nelem *= dims[u];",
+      "function": "H5S_set_extent_simple"
+    },
+    "H5SM.c:492": {
+      "text": "    fheap_cparam.managed.width            = H5O_FHEAP_MAN_WIDTH;",
+      "function": "H5SM__create_index"
+    },
+    "H5SM.c:571": {
+      "text": "        assert(header->index_type == H5SM_BTREE);",
+      "function": "H5SM__delete_index"
+    },
+    "H5SM.c:732": {
+      "text": "                HGOTO_ERROR(H5E_SOHM, H5E_CANTLOAD, FAIL, \"Couldn't read SOHM message in list\");",
+      "function": "H5SM__convert_list_to_btree"
+    },
+    "H5SM.c:1103": {
+      "text": "    if (H5SM__write_mesg(f, open_oh, &(table->indexes[index_num]), (defer_flags & H5SM_DEFER) != 0, type_id,",
+      "function": "H5SM_try_share"
+    },
+    "H5SM.c:1178": {
+      "text": "        assert(message->location == H5SM_IN_HEAP);",
+      "function": "H5SM__incr_ref"
+    },
+    "H5SM.c:1278": {
+      "text": "        if (NULL == (list = (H5SM_list_t *)H5AC_protect(f, H5AC_SOHM_LIST, header->index_addr, &cache_udata,",
+      "function": "H5SM__write_mesg"
+    },
+    "H5SM.c:1960": {
+      "text": "        assert(H5F_SOHM_NINDEXES(f) > 0 && H5F_SOHM_NINDEXES(f) <= H5O_SHMESG_MAX_NINDEXES);",
+      "function": "H5SM_get_info"
+    },
+    "H5SM.c:1984": {
+      "text": "            assert(sohm_l2b == table->indexes[u].list_max);",
+      "function": "H5SM_get_info"
+    },
+    "H5SM.c:2293": {
+      "text": "    if (NULL == (udata->encoding_buf = H5MM_malloc(obj_len)))",
+      "function": "H5SM__read_mesg_fh_cb"
+    },
+    "H5SM.c:2343": {
+      "text": "        type = H5O_msg_class_g[mesg->msg_type_id]; /* map the type ID to the actual type object */",
+      "function": "H5SM__read_mesg"
+    },
+    "H5SM.c:2375": {
+      "text": "            HGOTO_ERROR(H5E_SOHM, H5E_CANTLOAD, FAIL, \"can't read message from fractal heap.\");",
+      "function": "H5SM__read_mesg"
+    },
+    "H5SMbtree2.c:181": {
+      "text": "        assert(sohm->location == H5SM_IN_OH);",
+      "function": "H5SM__bt2_debug"
+    },
+    "H5SMcache.c:190": {
+      "text": "H5SM__cache_table_deserialize(const void *_image, size_t H5_ATTR_NDEBUG_UNUSED len, void *_udata,",
+      "function": "H5SM__cache_table_deserialize"
+    },
+    "H5SMcache.c:214": {
+      "text": "    assert(H5F_SOHM_VERS(f) == HDF5_SHAREDHEADER_VERSION);",
+      "function": "H5SM__cache_table_deserialize"
+    },
+    "H5SMcache.c:222": {
+      "text": "    assert(table->num_indexes > 0);",
+      "function": "H5SM__cache_table_deserialize"
+    },
+    "H5SMcache.c:247": {
+      "text": "        table->indexes[u].index_type = (H5SM_index_type_t)*image++;",
+      "function": "H5SM__cache_table_deserialize"
+    },
+    "H5SMcache.c:271": {
+      "text": "        table->indexes[u].list_size = H5SM_LIST_SIZE(f, table->indexes[u].list_max);",
+      "function": "H5SM__cache_table_deserialize"
+    },
+    "H5SMcache.c:460": {
+      "text": "    *image_len = udata->header->list_size;",
+      "function": "H5SM__cache_list_get_initial_load_size"
+    },
+    "H5SMcache.c:477": {
+      "text": "H5SM__cache_list_verify_chksum(const void *_image, size_t H5_ATTR_UNUSED len, void *_udata)",
+      "function": "H5SM__cache_list_verify_chksum"
+    },
+    "H5SMcache.c:495": {
+      "text": "    if (udata->header->num_messages > udata->header->list_max)",
+      "function": "H5SM__cache_list_verify_chksum"
+    },
+    "H5SMcache.c:499": {
+      "text": "    chk_size = H5SM_LIST_SIZE(udata->f, udata->header->num_messages);",
+      "function": "H5SM__cache_list_verify_chksum"
+    },
+    "H5SMcache.c:525": {
+      "text": "H5SM__cache_list_deserialize(const void *_image, size_t H5_ATTR_NDEBUG_UNUSED len, void *_udata,",
+      "function": "H5SM__cache_list_deserialize"
+    },
+    "H5SMcache.c:566": {
+      "text": "    if (udata->header->num_messages > udata->header->list_max)",
+      "function": "H5SM__cache_list_deserialize"
+    },
+    "H5SMcache.c:571": {
+      "text": "    for (u = 0; u < udata->header->num_messages; u++) {",
+      "function": "H5SM__cache_list_deserialize"
+    },
+    "H5SMcache.c:572": {
+      "text": "        if (H5SM__message_decode(image, &(list->messages[u]), &ctx) < 0)",
+      "function": "H5SM__cache_list_deserialize"
+    },
+    "H5SMmessage.c:227": {
+      "text": "            assert(mesg->location == H5SM_IN_OH);",
+      "function": "H5SM__message_compare"
+    },
+    "H5SMmessage.c:312": {
+      "text": "    message->location = (H5SM_storage_loc_t)*raw++;",
+      "function": "H5SM__message_decode"
+    },
+    "H5SMmessage.c:313": {
+      "text": "    UINT32DECODE(raw, message->hash);",
+      "function": "H5SM__message_decode"
+    },
+    "H5SMmessage.c:323": {
+      "text": "        message->msg_type_id = *raw++;",
+      "function": "H5SM__message_decode"
+    },
+    "H5Shyper.c:4340": {
+      "text": "    UINT32DECODE(pp, rank);",
+      "function": "H5S__hyper_deserialize"
+    },
+    "H5Shyper.c:4341": {
+      "text": "    if (0 == rank || rank > H5S_MAX_RANK)",
+      "function": "H5S__hyper_deserialize"
+    },
+    "H5Sselect.c:2377": {
+      "text": "            H5VM_array_fill(buf, fill, fill_size, (len[curr_seq] / fill_size));",
+      "function": "H5S_select_fill"
+    },
+    "H5T.c:425": {
+      "text": "        dt->shared->version              = H5O_DTYPE_VERSION_4;                                              \\",
+      "function": null
+    },
+    "H5T.c:4247": {
+      "text": "                ssize_t accum_change = 0; /* Amount of change in the offset of the fields */",
+      "function": "H5T__complete_copy"
+    },
+    "H5T.c:6939": {
+      "text": "                        dt->shared->size = dt->shared->u.array.nelem * dt->shared->parent->shared->size;",
+      "function": "H5T_set_loc"
+    },
+    "H5T.c:6982": {
+      "text": "                                HGOTO_ERROR(H5E_DATATYPE, H5E_BADVALUE, FAIL,",
+      "function": "H5T_set_loc"
+    },
+    "H5T.c:6990": {
+      "text": "                            accum_change += (ssize_t)(memb_type->shared->size - old_size);",
+      "function": "H5T_set_loc"
+    },
+    "H5Tarray.c:156": {
+      "text": "    for (u = 0, ret_value->shared->u.array.nelem = 1; u < ndims; u++) {",
+      "function": "H5T__array_create"
+    },
+    "H5Tarray.c:158": {
+      "text": "        ret_value->shared->u.array.nelem *= (size_t)dim[u];",
+      "function": "H5T__array_create"
+    },
+    "H5Tbit.c:353": {
+      "text": "        buf[idx++] = (uint8_t)(value ? 0xff : 0x00);",
+      "function": "H5T__bit_set"
+    },
+    "H5Tbit.c:440": {
+      "text": "                    if (value == (bool)((buf[idx] >> (iu - 1)) & 0x01))",
+      "function": "H5T__bit_find"
+    },
+    "H5Tcomplex.c:133": {
+      "text": "    dt->shared->size = 2 * base->shared->size;",
+      "function": "H5T__complex_create"
+    },
+    "H5Tcompound.c:420": {
+      "text": "    if ((offset + total_size) > parent->shared->size)",
+      "function": "H5T__insert"
+    },
+    "H5Tcompound.c:421": {
+      "text": "        HGOTO_ERROR(H5E_DATATYPE, H5E_CANTINSERT, FAIL, \"member extends past end of compound type\");",
+      "function": "H5T__insert"
+    },
+    "H5Tconv_complex.c:70": {
+      "text": "            H5T_atomic_t dst_atomic; /* destination datatype atomic info */",
+      "function": "H5T__conv_complex"
+    },
+    "H5Tconv_complex.c:252": {
+      "text": "        realval_type = H5T__conv_float_find_special(s, &src_atomic, NULL);",
+      "function": "H5T__conv_complex_loop"
+    },
+    "H5Tconv_complex.c:433": {
+      "text": "                H5T__bit_set(d, dst_atomic.offset + dst_atomic.prec,",
+      "function": "H5T__conv_complex_loop"
+    },
+    "H5Tconv_complex.c:555": {
+      "text": "        if ((mant_msb = H5T__bit_find(s, src_atomic.u.f.mpos, src_atomic.u.f.msize, H5T_BIT_MSB, true)) > 0)",
+      "function": "H5T__conv_complex_part"
+    },
+    "H5Tconv_compound.c:859": {
+      "text": "                        xbuf = buf + src_memb->offset;",
+      "function": "H5T__conv_struct_opt"
+    },
+    "H5Tconv_compound.c:868": {
+      "text": "                            memcpy(xbkg, xbuf, dst_memb->size);",
+      "function": "H5T__conv_struct_opt"
+    },
+    "H5Tconv_enum.c:131": {
+      "text": "        H5T__sort_name(priv->src_copy, NULL);",
+      "function": "H5T__conv_enum_init"
+    },
+    "H5Tconv_float.c:590": {
+      "text": "                H5T__bit_set(d, dst_atomic.offset + dst_atomic.prec,",
+      "function": "H5T__conv_f_f_loop"
+    },
+    "H5Tconv_float.c:1426": {
+      "text": "                if (H5T__conv_f_f_loop(src_p, dst_p, conv_ctx, nelmts, buf_stride, buf) < 0)",
+      "function": "H5T__conv_f_complex"
+    },
+    "H5Tconv_reference.c:227": {
+      "text": "                            if (dst->shared->u.atomic.u.r.cls->write(",
+      "function": "H5T__conv_ref"
+    },
+    "H5Tconv_vlen.c:389": {
+      "text": "                            src_size = seq_len * src_base_size;",
+      "function": "H5T__conv_vlen"
+    },
+    "H5Tfields.c:307": {
+      "text": "            assert(size <= sizeof(tbuf));",
+      "function": "H5T__sort_value"
+    },
+    "H5Tfields.c:318": {
+      "text": "                        H5MM_memcpy(tbuf, (uint8_t *)dt->shared->u.enumer.value + (j * size), size);",
+      "function": "H5T__sort_value"
+    },
+    "H5Tfields.c:408": {
+      "text": "            assert(size <= sizeof(tbuf));",
+      "function": "H5T__sort_name"
+    },
+    "H5Tfields.c:418": {
+      "text": "                        H5MM_memcpy(tbuf, (uint8_t *)dt->shared->u.enumer.value + (j * size), size);",
+      "function": "H5T__sort_name"
+    },
+    "H5Tref.c:256": {
+      "text": "                dt->shared->size          = H5T_REF_OBJ_DISK_SIZE(f);",
+      "function": "H5T__ref_set_loc"
+    },
+    "H5Tref.c:312": {
+      "text": "                dt->shared->size =",
+      "function": "H5T__ref_set_loc"
+    },
+    "H5Tref.c:713": {
+      "text": "            if (H5R__decode((const unsigned char *)src_buf, &src_size, &tmp_ref) < 0)",
+      "function": "H5T__ref_mem_write"
+    },
+    "H5Tref.c:892": {
+      "text": "        ret_value = src_size;",
+      "function": "H5T__ref_disk_getsize"
+    },
+    "H5Tvlen.c:300": {
+      "text": "                dt->shared->size = 4 + cont_info.blob_id_size;",
+      "function": "H5T__vlen_set_loc"
+    },
+    "H5Tvlen.c:717": {
+      "text": "H5T__vlen_disk_getlen(H5VL_object_t H5_ATTR_UNUSED *file, const void *_vl, size_t *seq_len)",
+      "function": "H5T__vlen_disk_getlen"
+    },
+    "H5VLcallback.c:2456": {
+      "text": "    if (H5VL__dataset_get(vol_obj->data, vol_obj->connector->cls, args, dxpl_id, req) < 0)",
+      "function": "H5VL_dataset_get"
+    },
+    "H5VLnative.c:413": {
+      "text": "    if (H5VL_native_addr_to_token(vol_obj, vol_obj_type, addr, token) < 0)",
+      "function": "H5VLnative_addr_to_token"
+    },
+    "H5VLnative.c:430": {
+      "text": "H5VL_native_addr_to_token(void *obj, H5I_type_t obj_type, haddr_t addr, H5O_token_t *token)",
+      "function": "H5VL_native_addr_to_token"
+    },
+    "H5VLnative.c:451": {
+      "text": "    H5F_addr_encode_len(addr_len, &p, addr);",
+      "function": "H5VL_native_addr_to_token"
+    },
+    "H5VLnative.c:523": {
+      "text": "H5VL_native_token_to_addr(void *obj, H5I_type_t obj_type, H5O_token_t token, haddr_t *addr)",
+      "function": "H5VL_native_token_to_addr"
+    },
+    "H5VLnative.c:541": {
+      "text": "    H5F_addr_decode_len(addr_len, &p, addr);",
+      "function": "H5VL_native_token_to_addr"
+    },
+    "H5VLnative_blob.c:120": {
+      "text": "        if (hobj_size != size)",
+      "function": "H5VL__native_blob_get"
+    },
+    "H5VLnative_blob.c:162": {
+      "text": "            *args->args.is_null.isnull = (addr == 0 ? true : false);",
+      "function": "H5VL__native_blob_specific"
+    },
+    "H5VLnative_dataset.c:373": {
+      "text": "    if (H5D__read(count, dinfo) < 0)",
+      "function": "H5VL__native_dataset_read"
+    },
+    "H5VLnative_dataset.c:455": {
+      "text": "            if ((args->args.get_space.space_id = H5D__get_space(dset)) < 0)",
+      "function": "H5VL__native_dataset_get"
+    },
+    "H5VLnative_object.c:374": {
+      "text": "                if (H5VL_native_addr_to_token(loc.oloc->file, H5I_FILE, obj_loc.oloc->addr,",
+      "function": "H5VL__native_object_specific"
+    },
+    "H5VM.c:753": {
+      "text": "    H5MM_memcpy(dst, src, size); /* copy first item */",
+      "function": "H5VM_array_fill"
+    },
+    "H5VM.c:1383": {
+      "text": "            H5MM_memcpy(dst, src, tmp_src_len);",
+      "function": "H5VM_memcpyvv"
+    },
+    "H5VM.c:1426": {
+      "text": "            H5MM_memcpy(dst, src, tmp_dst_len);",
+      "function": "H5VM_memcpyvv"
+    },
+    "H5VM.c:1469": {
+      "text": "            H5MM_memcpy(dst, src, tmp_dst_len);",
+      "function": "H5VM_memcpyvv"
+    },
+    "H5VMprivate.h:402": {
+      "text": "    assert(POWER_OF_TWO(n));",
+      "function": "H5VM_log2_of2"
+    },
+    "H5VMprivate.h:453": {
+      "text": "static const unsigned char H5VM_bit_set_g[8]   = {0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};",
+      "function": "H5VM_limit_enc_size"
+    },
+    "H5Z.c:1596": {
+      "text": "    if (pline && (flags & H5Z_FLAG_REVERSE)) { /* Read */",
+      "function": "H5Z_pipeline"
+    },
+    "H5Z.c:1638": {
+      "text": "                    new_nbytes = (fclass->filter)(tmp_flags, pline->filter[idx].cd_nelmts, pline->filter[idx].cd_values, *nbytes, buf_size, buf);",
+      "function": "H5Z_pipeline"
+    },
+    "H5Zfletcher32.c:75": {
+      "text": "                       const unsigned H5_ATTR_UNUSED cd_values[], size_t nbytes, size_t *buf_size, void **buf)",
+      "function": "H5Z__filter_fletcher32"
+    },
+    "H5Zfletcher32.c:96": {
+      "text": "        if (nbytes <= FLETCHER_LEN)",
+      "function": "H5Z__filter_fletcher32"
+    },
+    "H5Zfletcher32.c:97": {
+      "text": "            HGOTO_ERROR(H5E_ARGS, H5E_BADVALUE, 0, \"buffer too short\");",
+      "function": "H5Z__filter_fletcher32"
+    },
+    "H5Zfletcher32.c:100": {
+      "text": "         * to save performance. */",
+      "function": "H5Z__filter_fletcher32"
+    },
+    "H5Zfletcher32.c:101": {
+      "text": "        if (!(flags & H5Z_FLAG_SKIP_EDC)) {",
+      "function": "H5Z__filter_fletcher32"
+    },
+    "H5Zfletcher32.c:107": {
+      "text": "            src_nbytes -= FLETCHER_LEN;",
+      "function": "H5Z__filter_fletcher32"
+    },
+    "H5Zfletcher32.c:112": {
+      "text": "            fletcher = H5_checksum_fletcher32(src, src_nbytes);",
+      "function": "H5Z__filter_fletcher32"
+    },
+    "H5Znbit.c:466": {
+      "text": "    /* Set datatype class code */",
+      "function": "H5Z__set_parms_atomic"
+    },
+    "H5Znbit.c:484": {
+      "text": "            cd_values[(*cd_values_index)++] = H5Z_NBIT_ORDER_LE;",
+      "function": "H5Z__set_parms_atomic"
+    },
+    "H5Znbit.c:514": {
+      "text": "    cd_values[(*cd_values_index)++] = (unsigned)dtype_precision;",
+      "function": "H5Z__set_parms_atomic"
+    },
+    "H5Znbit.c:517": {
+      "text": "    cd_values[(*cd_values_index)++] = dtype_offset;",
+      "function": "H5Z__set_parms_atomic"
+    },
+    "H5Znbit.c:932": {
+      "text": "    cd_values[0] = (unsigned)cd_values_actual_nparms;",
+      "function": "H5Z__set_local_nbit"
+    },
+    "H5Znbit.c:957": {
+      "text": "H5Z__filter_nbit(unsigned flags, size_t cd_nelmts, const unsigned cd_values[], size_t nbytes,",
+      "function": "H5Z__filter_nbit"
+    },
+    "H5Znbit.c:979": {
+      "text": "    if (cd_nelmts != cd_values[0])",
+      "function": "H5Z__filter_nbit"
+    },
+    "H5Znbit.c:985": {
+      "text": "    if (cd_values[1])",
+      "function": "H5Z__filter_nbit"
+    },
+    "H5Znbit.c:1005": {
+      "text": "        size_out = d_nelmts * (size_t)cd_values[4]; /* cd_values[4] stores datatype size */",
+      "function": "H5Z__filter_nbit"
+    },
+    "H5Znbit.c:1163": {
+      "text": "    if (p->order == H5Z_NBIT_ORDER_LE) { /* little endian */",
+      "function": "H5Z__nbit_decompress_one_atomic"
+    },
+    "H5Znbit.c:1178": {
+      "text": "        assert(p->order == H5Z_NBIT_ORDER_BE);",
+      "function": "H5Z__nbit_decompress_one_atomic"
+    },
+    "H5Znbit.c:1229": {
+      "text": "            n = total_size / p.size;",
+      "function": "H5Z__nbit_decompress_one_array"
+    },
+    "H5Znbit.c:1323": {
+      "text": "        if ((member_offset + member_size) > size)",
+      "function": "H5Z__nbit_decompress_one_compound"
+    },
+    "H5Znbit.c:1421": {
+      "text": "                    HGOTO_ERROR(H5E_PLINE, H5E_CANTFILTER, FAIL, \"can't decompress atomic\");",
+      "function": "H5Z__nbit_decompress"
+    },
+    "H5Znbit.c:1578": {
+      "text": "            n           = total_size / p.size;",
+      "function": "H5Z__nbit_compress_one_array"
+    },
+    "H5Zscaleoffset.c:129": {
+      "text": "#define H5Z_SCALEOFFSET_TOTAL_NPARMS     20 /* Total number of parameters for filter */",
+      "function": "H5Z__scaleoffset_register"
+    },
+    "H5Zscaleoffset.c:149": {
+      "text": "#define H5Z_SCALEOFFSET_FILL_UNDEFINED 0 /* Fill value is not defined */",
+      "function": "H5Z__scaleoffset_register"
+    },
+    "H5Zscaleoffset.c:1065": {
+      "text": "            cd_values[H5Z_SCALEOFFSET_PARM_ORDER] = H5Z_SCALEOFFSET_ORDER_LE;",
+      "function": "H5Z__set_local_scaleoffset"
+    },
+    "H5Zscaleoffset.c:1081": {
+      "text": "    if (H5P_fill_value_defined(dcpl_plist, &status) < 0)",
+      "function": "H5Z__set_local_scaleoffset"
+    },
+    "H5Zscaleoffset.c:1152": {
+      "text": "    if (cd_nelmts != H5Z_SCALEOFFSET_TOTAL_NPARMS)",
+      "function": "H5Z__filter_scaleoffset"
+    },
+    "H5Zscaleoffset.c:1176": {
+      "text": "    d_nelmts     = cd_values[H5Z_SCALEOFFSET_PARM_NELMTS];",
+      "function": "H5Z__filter_scaleoffset"
+    },
+    "H5Zscaleoffset.c:1207": {
+      "text": "    /* fixed-minimum-bits method is not implemented and is forbidden */",
+      "function": "H5Z__filter_scaleoffset"
+    },
+    "H5Zscaleoffset.c:1218": {
+      "text": "        /* no need to process data */",
+      "function": "H5Z__filter_scaleoffset"
+    },
+    "H5Zscaleoffset.c:1245": {
+      "text": "        if (nbytes < 5)",
+      "function": "H5Z__filter_scaleoffset"
+    },
+    "H5Zscaleoffset.c:1255": {
+      "text": "            HGOTO_ERROR(H5E_ARGS, H5E_BADVALUE, 0, \"minimum number of bits exceeds size of type\");",
+      "function": "H5Z__filter_scaleoffset"
+    },
+    "H5Zscaleoffset.c:1284": {
+      "text": "        size_out = d_nelmts * (size_t)p.size;",
+      "function": "H5Z__filter_scaleoffset"
+    },
+    "H5Zszip.c:317": {
+      "text": "    if (flags & H5Z_FLAG_REVERSE) {",
+      "function": "H5Z__filter_szip"
+    },
+    "H5Zszip.c:325": {
+      "text": "        if (nbytes <= SZIP_HEADER_LEN)",
+      "function": "H5Z__filter_szip"
+    },
+    "H5Zszip.c:326": {
+      "text": "            HGOTO_ERROR(H5E_ARGS, H5E_BADVALUE, 0, \"buffer too short\");",
+      "function": "H5Z__filter_szip"
+    },
+    "H5Zszip.c:330": {
+      "text": "        UINT32DECODE(newbuf, stored_nalloc);",
+      "function": "H5Z__filter_szip"
+    },
+    "H5Zszip.c:333": {
+      "text": "        /* Allocate space for the uncompressed buffer */",
+      "function": "H5Z__filter_szip"
+    },
+    "H5Zszip.c:334": {
+      "text": "        if (NULL == (outbuf = (unsigned char *)H5MM_malloc(nalloc)))",
+      "function": "H5Z__filter_szip"
+    },
+    "H5Zszip.c:339": {
+      "text": "        if (SZ_BufftoBuffDecompress(outbuf, &size_out, newbuf, nbytes - SZIP_HEADER_LEN, &sz_param) != SZ_OK)",
+      "function": "H5Z__filter_szip"
+    },
+    "H5checksum.c:117": {
+      "text": "            sum1 += (uint32_t)(((uint16_t)data[0]) << 8) | ((uint16_t)data[1]);",
+      "function": "H5_checksum_fletcher32"
+    },
+    "H5encode.h:178": {
+      "text": "#define UINT32DECODE(p, i)                                                                                   \\",
+      "function": null
+    },
+    "H5encode.h:192": {
+      "text": "#define DECODE_VAR(p, n, l)                                                                                  \\",
+      "function": null
+    },
+    "H5encode.h:221": {
+      "text": "        /* WE DON'T CHECK FOR OVERFLOW! */                                                                   \\",
+      "function": null
+    },
+    "H5encode.h:255": {
+      "text": "    } while (0)",
+      "function": null
+    },
+    "H5encode.h:270": {
+      "text": "            default:                                                                                         \\",
+      "function": null
+    },
+    "H5private.h:344": {
+      "text": "#define H5_IS_BUFFER_OVERFLOW(ptr, size, buffer_end)                                                         \\",
+      "function": null
+    },
+    "H5private.h:347": {
+      "text": "      ((size) != 0) &&                                                                                       \\",
+      "function": null
+    },
+    "H5public.h:321": {
+      "text": "typedef uint64_t hsize_t;",
+      "function": null
+    },
+    "H5public.h:445": {
+      "text": "#define H5O_MAX_TOKEN_SIZE (16)",
+      "function": null
+    },
+    "H5system.c:796": {
+      "text": "    if (path1 == NULL || *path1 == '\\0' || H5_CHECK_ABSOLUTE(path2)) {",
+      "function": "H5_combine_path"
+    }
+  }
+}

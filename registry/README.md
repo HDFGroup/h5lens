@@ -18,6 +18,7 @@ Registry files plus a case directory, one schema version:
 | [`message-routing.yml`](message-routing.yml) | Measured inventory of finding **messages** that resolve to no record family. A shared code's family comes from its grouped route rules, and for an `ambiguous` code a message matching no rule names no family at all. Regenerate with `python3 tools/message_routing.py --write`; `check_registry.py` fails on drift either way. |
 | [`libhdf5-evidence.yml`](libhdf5-evidence.yml) | **Generated.** What the selected libhdf5 build actually did, per record family, measured by the canary matrix. |
 | [`lazy-validation.json`](lazy-validation.json) | **Generated.** Measurement that validation cost tracks metadata rather than data volume, with physical-file endpoints, a sensitivity control, and the explicit latest-format/timestamps-disabled fixture policy. |
+| [`upstream-citations.json`](upstream-citations.json) | **Generated.** One recorded anchor per libhdf5 line citation in the tracked tree -- the exact text of the cited line and the function holding it -- so a citation that drifts can be told from one that still points where it says. Written only by `tools/check_upstream_citations.py`; see [below](#citations-into-the-libhdf5-tree). |
 | [`truncation-sweep.json`](truncation-sweep.json) | **Generated.** Result of the §12 truncation sweep: every prefix of each seed, and whether coverage was exhaustive or sampled. |
 | [`verification-coverage.yml`](verification-coverage.yml) | **Generated.** Which of the [§12](../docs/A%20CVE%20strategy%20for%20the%20HDF5%20library.md) verification requirements each record family demonstrably meets. |
 | [`ssp-control-evidence.yml`](ssp-control-evidence.yml) | Checked, deliberately narrow mapping from selected HDF5 SSP controls to record/invariant/finding, fixture, canary, and exact-build measurement. It is technical evidence, not complete control attestation. |
@@ -68,31 +69,89 @@ may come between them — so a citation with no anchor cannot quietly adopt the
 next parenthetical in the sentence. When a citation does break, the error names
 the missing token, which turns the repair into a grep.
 
-Citations into the **libhdf5 tree** — 343 distinct file/line pairs, in records,
-expectations, pickles and generators — get a weaker gate of their own,
-`tools/check_upstream_citations.py`: the file exists, the line is in range, and
-the line holds something other than whitespace, a lone brace or a comment
-delimiter. That is all it can check without an anchor, and the anchor is what it
-cannot have. Inferring one from the surrounding prose was built and measured
-first: of 842 citation occurrences, 425 name no function at all in their context,
-and the mismatches were dominated by sentences carrying two citations and two
-function names, which cross-match into false positives. A gate whose false
-positives look like its true positives gets switched off, so this one checks only
-the part that needs no annotation — and misses, by construction, a citation that
-drifts onto *another statement*.
+### Citations into the libhdf5 tree
 
-It still earns its place. Measured when it was written, against develop
-`b7b85e7abf9`: **nine** distinct citations had drifted onto a blank line, a bare
-brace or a comment terminator, in **sixteen** places, each one or two lines from
-the statement its own prose described. None was wrong when written; upstream
-inserted lines above them.
+Citations into the **libhdf5 tree** — 1505 occurrences over 674 distinct
+file/line pairs, in records, expectations, pickles and generators — are anchored
+too, by `tools/check_upstream_citations.py`, but the anchor is neither written
+by hand nor inferred. It is **recorded**, in
+[`upstream-citations.json`](upstream-citations.json): for each distinct citation,
+the exact text of the cited line and the name of the function containing it, as
+observed in a named upstream revision.
+
+That choice is what makes the convention affordable. An inline anchor does not
+scale to 1503 sites, and inferring one from the surrounding prose was built and
+measured before the recorded form existed: of 842 citation occurrences, 425 name
+no function at all in their context, and the mismatches were dominated by
+sentences carrying two citations and two function names, which cross-match into
+false positives. Recording the anchor keeps prose in its present spelling —
+`H5HLcache.c:258`, no churn across 190 files — and the anchor cannot be
+forgotten the way an inline one can, because a generator writes it.
+
+**What the anchor buys**, measured over the 125 upstream commits between develop
+`b7b85e7abf9` and `b32cc3c776f`, replaying all 1468 `.c` citation occurrences
+across that gap:
+
+| Outcome | Occurrences | Verdict |
+|---|---|---|
+| The cited line did not move | 1149 | silent |
+| Moved; the text relocates uniquely inside the recorded function | 236 | `UPSTREAM_CITATION_DRIFTED` — `--fix` repairs it |
+| Moved; the text occurs twice inside the recorded function | 3 | `UPSTREAM_CITATION_DRIFTED`, nearest match |
+| The text now sits in a **different** function | 8 | `UPSTREAM_CITATION_MOVED` — needs a reader |
+| The text is gone; upstream edited the statement | 42 | `UPSTREAM_CITATION_STALE` — needs a reader |
+
+Of the 289 citations that moved, 239 moved for no reason a reader cares about,
+and `--fix` renumbers them in one pass, carrying each anchor to its new line. The
+remaining 50 are exactly the cases where upstream changed the code the citing
+prose describes.
+
+**The gate this replaced caught 2 of those 50.** Its rule — the line must hold
+something other than whitespace, a lone brace or a comment delimiter — fires only
+when drift happens to land on a blank line. Over the same 125 commits, 2 of the
+42 genuinely-changed citations landed somewhere it could see; the other 40 slid
+onto an unrelated live statement, which is syntactically perfect and therefore
+silent. That rule survives for citations with no recorded anchor, which is what a
+`--paths` scan of an untracked case bundle has.
+
+**`--refresh` deliberately does not regenerate.** The obvious spelling of the
+writer — read every citation, record what is there now — re-anchors every drifted
+citation to whatever statement happens to sit at that line the moment upstream
+moves, which is the error this gate exists to catch, performed automatically and
+committed as evidence. So `--refresh` anchors only citations that have none,
+drops entries nothing cites, and leaves every standing anchor alone; `--fix`
+carries a shifted anchor across rather than re-reading it; and re-recording in
+place is `--reanchor`, named one citation at a time, for when upstream edited the
+statement, the line number is still right, and a reader has confirmed the claim.
+A reader who instead corrects the *number* needs no escape hatch: the key
+changes, the old entry is dropped as an orphan, and the new one anchors like any
+other new citation. `verified_at` may only advance on a run where every anchor
+agreed with the tree, so pointing `--tree` at an old checkout cannot stamp a
+revision the anchors never matched.
+
+**A continuation line number is not a citation**, and the gate does not see one.
+Two spellings in use carry a second number that names no file: `H5Ocopy_ref.c:193,362`
+(23 places) and a separate backticked `` `:1896` `` following a full citation
+(17 places). Only the first number of each is anchored, checked and renumbered,
+so a continuation drifts silently and `--fix` leaves it behind. Parsing them
+would mean deciding which preceding file a bare `:382` belongs to, which is the
+inference that was measured and rejected for anchors. Write a second full
+citation instead when the number matters.
 
 The tree is not in this repository and its location is a per-machine path that
 portable provenance forbids recording, so the checker reads `HDF5_SOURCE_DIR`
-(the variable the devcontainer build script already uses) and reports itself
-**SKIPPED** when that is unset or does not name a checkout. A skip is not a pass
-and prints as its own word; the OK line names the upstream revision it agreed
-with, because a citation is only correct *against a stated tree*.
+(the variable the devcontainer build script already uses) and reports the content
+comparison **SKIPPED** when that is unset or does not name a checkout. A skip is
+not a pass and prints as its own word. It is no longer total, which is the other
+thing the index buys: with no tree at all the checker still verifies that every
+citation in the tracked set has an entry and that the index holds nothing stale,
+so a citation added without anchoring fails on a machine with no checkout. The OK
+line names the upstream revision it agreed with, because a citation is only
+correct *against a stated tree*.
+
+The first `--refresh` recorded whatever the tracked citations pointed at on the
+day it ran. The anchors inherit that day's correctness; they do not establish it.
+What they establish is everything after — that no citation changes meaning
+without someone saying so.
 
 ## Vocabulary (from the strategy doc)
 
