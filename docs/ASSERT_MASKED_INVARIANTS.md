@@ -51,9 +51,12 @@ misaligned or unmapped access).
 
 ## SOHM (`H5SM*.c`, 170 asserts across 5 files — complete)
 
-Every finding below has now been built as a real fixture (one or two bytes
-changed in a valid seed, checksum resealed) and measured against both
-`h5policy` and a real libhdf5 build — none are "traced only."
+Every finding in the table below has been built as a real fixture (one or two
+bytes changed in a valid seed, checksum resealed) and measured against both
+`h5policy` and a real libhdf5 build — none of the six are "traced only." The
+note that follows the table is now measured too, by a fixture of a different
+shape: a cache-image entry whose declared length disagrees with the index it
+caches. It is the one finding in this section that `h5policy` accepts.
 
 | # | Invariant | Root cause | Guard site(s) | Consequence | `h5policy` |
 |---|---|---|---|---|---|
@@ -64,12 +67,133 @@ changed in a valid seed, checksum resealed) and measured against both
 | 5 | `list_max`/`btree_min` cross-index consistency | `H5SM.c:1984-1985` — decoded independently per index, no cross-check | `H5SM.c:1984-1985` | **Measured: silent misreporting, no functional break.** Built a genuine 2-index file, patched only one index's values (unreachable via any legitimate API call). `H5Fget_create_plist()` silently reports the *other* index's values — the real list↔B-tree conversion logic is unaffected since it reads each index's own values directly | **None — confirmed coverage gap.** `h5policy` accepts the crafted file outright |
 | 6 | `msg_type_id` out-of-bounds array index | `H5SMmessage.c:323` — raw decode, indexes a fixed 27-element array with no bound check before the access | `H5SM.c:2343-2344`, `H5Omessage.c:1091` | **Measured, cross-platform (macOS + Linux, stock and ASan builds): the out-of-bounds read genuinely executes on a real, crafted file, and is silent on every build tested** — not because the access is safe, but because (a) ASan's redzones don't cover "wild" far-out-of-bounds reads on small globals, a general sanitizer limitation, not platform-specific, and (b) the one reachable consumer path uses the resulting garbage value only in a pointer-*equality* comparison, never a dereference | Confirmed: dedicated check (`H5_CORRUPT_SOHM_MESSAGE_TYPES`, `h5_sohm.pk:103-104 (msg_type >= 16UL)`) |
 
-**Also checked, not a vulnerability:** the *within*-index
-relationship `num_messages > list_max` (a single index whose message count
-already exceeds its own declared capacity) is already properly guarded — a
+**Also checked — the message count is guarded on both routes into the
+client:** the *within*-index relationship `num_messages > list_max` (a single
+index whose message count already exceeds its own declared capacity) carries a
 real, deliberate check in `H5SM__cache_list_verify_chksum`
-(`H5SMcache.c:495-496`, `"number of SOHM messages exceeds list size"`), not
-masked by anything.
+(`H5SMcache.c:495-496`) *and* a second one in `H5SM__cache_list_deserialize`
+itself (`H5SMcache.c:566-567`), immediately above the decode loop. Both read
+`"number of SOHM messages exceeds list size"`, and no build flag masks either.
+The deserialize-side check arrived with upstream `HDFGroup/hdf5#6499` (commit
+`20f0b9564bc`, 2026-07-14), so skipping `verify_chksum` does not unguard this
+invariant. An earlier revision of this note said it did; corrected 2026-11-24
+against develop `31715cc6d3a` (H5_VERS 2.4.0).
+
+**What the prefetched path leaves unguarded is the image length, not the
+message count.** The cache reaches this client two ways. `H5C__load_entry`
+calls `get_initial_load_size` and then `verify_chksum` before deserializing
+(`H5Centry.c:1221`), and for a SOHM list `get_initial_load_size` sets
+`*image_len = udata->header->list_size` (`H5SMcache.c:460`) — which is what
+makes `len` and `list_size` agree on that path.
+`H5C__deserialize_prefetched_entry` calls neither: it sets
+`len = pf_entry_ptr->size` and calls `deserialize` directly
+(`H5Centry.c:1891`, `:1896`), deliberately and with a comment saying why —
+"since the size of the on disk image is known exactly, there is no need for
+either a call to the `get_initial_load_size()` callback, or retries …
+Similarly, there is no need to clamp possible reads beyond EOF". Three
+protections are absent at once on that path — the initial-load-size callback,
+the EOF/end-of-allocation clamp, and `verify_chksum` — but only the first of
+the three bears on this client's extent.
+
+So nothing on that path forces `len == list_size`. `pf_entry_ptr->size` is
+decoded from the cache-image entry record and rejected only when it is zero
+(`H5Cimage.c:2829-2831`), and the entry image is allocated at exactly that size
+and filled from the cache-image block (`H5Cimage.c:2859`, `:2869`). The decode
+loop's extent, meanwhile, is `list_size` and not `len`: bounded by
+`num_messages <= list_max` it advances at most `list_max` ×
+`H5SM_SOHM_ENTRY_SIZE` bytes (`H5SMcache.c:571-575`), and `list_size` is
+`H5SM_LIST_SIZE(f, list_max)` computed from the decoded `list_max`
+(`H5SMcache.c:271`). A cache image whose SOHM-list entry is shorter than the
+header's `list_size` therefore drives the walk past the end of that allocation
+by up to `list_size - len` bytes. The one reconciliation of the two is the
+assert at `:543` (`udata->header->list_size == len`), which disappears under
+`-DNDEBUG` — `len` is declared `H5_ATTR_NDEBUG_UNUSED` for exactly that reason.
+The post-loop assert at `:584` is not a second one: it compares the consumed
+byte count against `list_size`, not against `len`. The signature check at
+`:557` reads `H5_SIZEOF_MAGIC` bytes before either.
+
+**Measured, 2026-11-25, against develop `31715cc6d3a`.** A fixture now exists
+and the hole is a live finding, not a source-derived one.
+
+*Construction.* One library-written seed carries both features at once: a
+shared-message index in list form (`list_max` 32, so `list_size` is 552 — an
+8-byte prefix plus 32 × 17) and a generated metadata cache image. libhdf5
+serializes the list **into** the image and leaves its file address unwritten,
+so for such a file the prefetched path is the only route to the list. The
+specimen changes one field: the cache-image entry for the list declares 8
+bytes instead of 552. Its cache-image Jenkins checksum, the image length and
+the superblock-extension message that declares it are all re-sealed, so every
+other envelope in the file is valid.
+
+*What libhdf5 does.* A single `H5Dcreate2` whose datatype and dataspace are
+already shared reaches the list through `H5SM_try_share` (`H5SM.c:1103`) →
+`H5SM__write_mesg` (`H5SM.c:1278`) → `H5AC_protect` → `H5C_protect` →
+`H5C__deserialize_prefetched_entry` (`H5Centry.c:1896`). On a RelWithDebInfo
+AddressSanitizer build with the **shipped** assert state — `-DNDEBUG` present,
+`settings_sha256` `7a522de91894d50a…` — that is a `heap-buffer-overflow`,
+`READ of size 1` immediately past the 8-byte region allocated at
+`H5Cimage.c:2859`, in `H5SM__message_decode` (`H5SMmessage.c:313`) called from
+the decode loop at `H5SMcache.c:572`.
+
+On a stock Release build (asserts off, no sanitizers, `settings_sha256`
+`50e2633e493d8439…`) the same read is **silent**. The operation fails
+afterwards at `H5AC_unprotect` — "size of entry changed" (`H5AC.c:1568`) —
+because the client's `image_len` callback reports `list_size` while the cache
+recorded the entry at 8 bytes. That is a post-hoc consistency check, not a
+bound: it runs after the walk.
+
+*The bytes are consumed, not merely read.* A sibling specimen raises
+`num_messages` to `list_max`, which both always-on guards accept, so the walk
+spans the full 552 bytes. The list is then promoted to a B-tree and each
+decoded entry is dereferenced as a message location and a fractal-heap ID
+(`H5SM__convert_list_to_btree`, `H5SM.c:732`; `H5SM__read_mesg`,
+`H5SM.c:2375`).
+
+*The `:543` assert cannot fire.* Measured on a build identical to the one
+above except that `-DNDEBUG` is dropped (`settings_sha256`
+`d7803c2df288a8a5…`): every cache-image file, **including the unmodified
+seed**, aborts earlier at `assert(NULL == pf_entry_ptr)` (`H5Centry.c:2035`),
+on the first prefetched entry of the image — `gdb` puts that frame at
+`addr=97, type=H5AC_SOHM_TABLE` for both the control and the specimen. Its
+block is guarded by `#ifndef NDEGUG` (`H5Centry.c:2032`), a misspelling of
+`NDEBUG`, so the block compiles everywhere and only the assert inside it is
+removed by `-DNDEBUG`. So the one check standing between a short `len` and the
+walk is absent from every build where the walk is reachable. That is an
+adjacent defect in the metadata cache, recorded here because it is why this
+guard has no practical effect.
+
+**Measured: `h5policy` accepts the file.** A second specimen differs from the
+first only in writing the real 552-byte list body back to its file address, so
+every structure reachable on disk is valid. The oracle **accepts** it on
+`untrusted-strict`, `forensic` and `legacy` alike, while libhdf5 reads out of
+bounds on it — a confirmed coverage gap, not an inference. Nothing in
+`h5policy` compares a cache-image entry's declared length against the size the
+client at that address computes for itself; an entry that only partly covers a
+mapping silently falls back to the on-disk bytes
+(`h5_findings.pk:132-148 (h5policy_mdci_replay_source)`). The first specimen,
+whose file address libhdf5 left empty, *is* rejected — with
+`H5_CORRUPT_BAD_CHECKSUM` against zeroed bytes, which is that same fallback
+firing and not a check on this invariant.
+`H5_CORRUPT_SOHM_MESSAGE_COUNT` (`h5_sohm.pk:570 (nmessages > list_max)`) does
+not bear on it either: the specimens carry a conforming message count.
+
+*Provenance.* Specimens (sha256, bit-reproducible from the generator):
+`a0eedebec6d0867c…` the short entry, `c1522a059a73a282…` the same with the
+on-disk body restored, `6ffa9d2cb73fe518…` the amplified count,
+`f1c759dafdfbe9bb…` the seed. Builds are named by role — baseline (Release,
+asserts off, no sanitizers) and two candidates differing only in `-DNDEBUG` —
+and pinned by the `settings_sha256` values above; workstation-local installs,
+paths not recorded. Measured on x86-64 Linux only; no 32-bit libhdf5 is
+installed here, and the ILP32 behaviour is therefore **unmeasured** — the
+arithmetic is a difference of two `size_t` values rather than a product that
+can wrap, so the same over-read is *expected* at 32 bits, which is an
+inference.
+
+*Still open.* The same path question applies to `num_indexes` in row 2 above,
+whose "clean file-open failure" was measured on the ordinary load path — the
+path that has the end-of-allocation clamp this one lacks. The master table is
+cached in the same image, so the same construction applies to it; that has not
+been measured.
 
 **Note on `h5policy` coverage generally:** five of these six invariants
 have a dedicated check, all defined in `h5policy/pickles/h5_sohm.pk` (see
@@ -671,8 +795,8 @@ unconditionally):
 
 | # | Invariant | Root cause | Guard site(s) | Consequence | `h5policy` |
 |---|---|---|---|---|---|
-| 1 | A filtered chunk's stored `nbytes` must clear the pipeline's fixed framing before the chunk is read | `H5Olayout.c:401` (single-chunk, raw decode); the indexed forms decode the same field in their own record callbacks | `H5Dchunk.c:3116` asserts the chunk block is either address-defined with a positive length or address-undefined with zero length, which catches only the `nbytes == 0` case; `nbytes` of 1–3 passes that assert and reaches the filter unguarded | **Measured, both faces.** `nbytes == 0`: debug build `SIGABRT` at the `H5Dchunk.c:3116` assert (assert-masked — under `-DNDEBUG` it proceeds with a defined address and zero length into the filter path). `nbytes` of 1, 3: `SIGSEGV` — the fletcher32 `size − 4` underflow — which is *not* assert-masked and so reaches a Release build too. Both measured on a filtered single-chunk fixture (one chunk, fletcher32), object-header checksum resealed | **Not a gap.** `h5policy` rejects all three: `H5_CORRUPT_CHUNK_STORED_SIZE` "single-chunk chunk record has a zero stored size" for 0, and "filtered chunk record is smaller than the pipeline's fixed framing" (`h5policy/pickles/h5_validate.pk:687 (filtered chunk record is smaller than the pipeline's fixed framing)`) for 1 and 3 — the same framing floor the four indexed paths use |
-| 2 | A chunk's size, the product of its dimensions, must be nonzero before a chunk buffer is sized from it | `H5Dchunk.c:916-918` — each dimension is checked, but their product is accumulated with no overflow check, so a product of exactly 2⁶⁴ wraps to 0. The check right after the loop (`H5Dchunk.c:924`) compares two 64-bit values, so it cannot detect the wrap | `H5Dchunk.c:5275` (`assert(layout->u.chunk.size > 0)`, in `H5D__chunk_lock`) — the only real size check (`H5Dchunk.c:1250`) is an upper bound, which 0 passes | **Measured: crash (`SIGSEGV`), write path.** Chunk dimensions whose product, with the element size, is exactly 2⁶⁴ (layout v4 and v5): reading the dataset is clean and returns the fill value, but an ordinary one-element `H5Dwrite` makes a wild write — `H5VM_memcpyvv` copies the caller's data to an offset computed from the real dimensions, into a buffer sized for a zero-byte chunk. An asserts-enabled build aborts at this assert instead. Full history in `registry/cases/chunk-dim-product-64bit-overflow.yml` | Confirmed: dedicated check (`H5_CORRUPT_CHUNK_SIZE_PRODUCT_OVERFLOW`, `h5_layout.pk:213 (dim > H5POLICY_CHUNK_SIZE_UNKNOWN / acc)`) — not a gap |
+| 1 | A filtered chunk's stored `nbytes` must clear the pipeline's fixed framing before the chunk is read | `H5Olayout.c:401` (single-chunk, raw decode); the indexed forms decode the same field in their own record callbacks | `H5Dchunk.c:3117` asserts the chunk block is either address-defined with a positive length or address-undefined with zero length, which catches only the `nbytes == 0` case; `nbytes` of 1–3 passes that assert and reaches the filter unguarded | **Measured, both faces.** `nbytes == 0`: debug build `SIGABRT` at the `H5Dchunk.c:3117` assert (assert-masked — under `-DNDEBUG` it proceeds with a defined address and zero length into the filter path). `nbytes` of 1, 3: `SIGSEGV` — the fletcher32 `size − 4` underflow — which is *not* assert-masked and so reaches a Release build too. Both measured on a filtered single-chunk fixture (one chunk, fletcher32), object-header checksum resealed | **Not a gap.** `h5policy` rejects all three: `H5_CORRUPT_CHUNK_STORED_SIZE` "single-chunk chunk record has a zero stored size" for 0, and "filtered chunk record is smaller than the pipeline's fixed framing" (`h5policy/pickles/h5_validate.pk:687 (filtered chunk record is smaller than the pipeline's fixed framing)`) for 1 and 3 — the same framing floor the four indexed paths use |
+| 2 | A chunk's size, the product of its dimensions, must be nonzero before a chunk buffer is sized from it | `H5Dchunk.c:917-919` — each dimension is checked, but their product is accumulated with no overflow check, so a product of exactly 2⁶⁴ wraps to 0. The check right after the loop (`H5Dchunk.c:925`) compares two 64-bit values, so it cannot detect the wrap | `H5Dchunk.c:5317` (`assert(layout->u.chunk.size > 0)`, in `H5D__chunk_lock`) — the only real size check (`H5Dchunk.c:1251`) is an upper bound, which 0 passes | **Measured: crash (`SIGSEGV`), write path.** Chunk dimensions whose product, with the element size, is exactly 2⁶⁴ (layout v4 and v5): reading the dataset is clean and returns the fill value, but an ordinary one-element `H5Dwrite` makes a wild write — `H5VM_memcpyvv` copies the caller's data to an offset computed from the real dimensions, into a buffer sized for a zero-byte chunk. An asserts-enabled build aborts at this assert instead. Full history in `registry/cases/chunk-dim-product-64bit-overflow.yml` | Confirmed: dedicated check (`H5_CORRUPT_CHUNK_SIZE_PRODUCT_OVERFLOW`, `h5_layout.pk:213 (dim > H5POLICY_CHUNK_SIZE_UNKNOWN / acc)`) — not a gap |
 
 **This invariant bites filtered chunks specifically.** A non-filtered
 chunk takes its `chunk_block.length` from the *computed* layout chunk size
@@ -708,9 +832,9 @@ against — the same "severe but already covered" shape as V2 B-trees'
 
 **Recommendation for finding 2 (not implemented here):** bound the product
 where it is accumulated — in `H5O__layout_decode` and again in
-`H5D__chunk_set_sizes` (`H5Dchunk.c:916-918`), refusing when the running
+`H5D__chunk_set_sizes` (`H5Dchunk.c:917-919`), refusing when the running
 product would exceed `HSIZE_MAX / dim[u]` — rather than only promoting the
-assert at `H5Dchunk.c:5275`, which would stop the crash but leave the
+assert at `H5Dchunk.c:5317`, which would stop the crash but leave the
 wrapped size in the layout for everything else that reads it. `h5policy`
 needs no change.
 
@@ -1384,7 +1508,7 @@ copying — `H5HF__huge_op_real` already holds both values.
 
 A Fixed Array chunk index is sized when the dataset is created: its capacity
 (`nelmts`) is the number of chunks the dataspace's maximum dimensions imply
-(`H5D__chunk_set_info_real`, `H5Dchunk.c:794-811`, passed to the Fixed Array
+(`H5D__chunk_set_info_real`, `H5Dchunk.c:795-812`, passed to the Fixed Array
 at `H5Dfarray.c:850`), so in any file libhdf5 writes, the two agree. On
 read, nothing compares them: the stored capacity is used as found, and the
 maximum dimensions are never checked against it — not even by an assert.
